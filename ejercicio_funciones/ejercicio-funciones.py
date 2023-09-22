@@ -58,6 +58,24 @@ def validarNumeroIngresado():
         except:
             print("Numero ingresado invalido. Ingrese un numero valido.")
 
+def validarRadioIngresado():
+    """
+    Valida si el usario ingresa un radio valido
+
+    Returns:
+        float: radio ingresado por el usuario valido
+    """
+    while True:
+        radio_ingresado = validarNumeroIngresado()
+
+        if radio_ingresado > 0 :
+                limpiar_consola()
+                break
+        else:
+            print("Ingrese un numero entero positivo")
+
+    return radio_ingresado
+
 def cargarListaDeNumeros():
     """
     Arma una lista de numeros ingresador por el usuario
@@ -196,11 +214,11 @@ while True:
     print("3. Suma de numeros")
     print("4. Maximo entre 3 numeros")
     print("5. Invertir cadena")
-    print("6. View Posts")
-    print("7. Search")
-    print("8. View Notifications")
-    print("9. Logout")
-    print("10. blabla")
+    print("6. Palabras por orden alfabetico")
+    print("7. Potencia de un numero")
+    print("8. Lista de numeros pares")
+    print("9. Producto de numeros")
+    print("10. Palindromo")
     print("0. Salir")
     print("=========================================")
 
@@ -213,68 +231,72 @@ while True:
                 limpiar_consola()
                 break
             else:
-                print("Invalid choice. Please enter a number between 0 and 10.")
+                print("Opcion invalida. Ingrese un numero entre 0 y 10.")
         else:
-            print("Invalid input. Please enter a valid number.")
+            print("Opcion invalida. Ingrese un numero valido.")
 
     # OPCIONES INGRESADAS POR EL USUARIO
     match opcion_ingresada:
+
         case 0: # SALIR DEL PROGRAMA
+
             salir_del_programa()
+
         case 1: # AREA DEL CIRCULO
-            while True:
-                radio_ingresado = validarNumeroIngresado()
 
-                if radio_ingresado > 0 :
-                        limpiar_consola()
-                        break
-                else:
-                    print("Ingrese un numero entero positivo")
-
-            print(f"Area del circulo = {calcularAreaDeCirculo(radio_ingresado)}")
+            radio_ingresado = validarRadioIngresado() 
+            area = calcularAreaDeCirculo(radio_ingresado)
+            print(f"Area del circulo de radio {radio_ingresado} = {area}")
             print("")
 
         case 2: # NUMERO PAR OR IMPAR
+
             numero_ingresado = validarNumeroIngresado()
             respuesta = elNumeroEsPar(numero_ingresado)
-
             print(f"El numero {numero_ingresado} es = {respuesta}")
             print("")
 
         case 3: # SUMA DE NUMEROS DE UNA LISTA
+
             lista_ingresada = cargarListaDeNumeros()
             suma_total = sumaDeNumeros(lista_ingresada)
             print(lista_ingresada)
             print(f"\nLa suma total de los numeros ingreados es = {suma_total}")
-            
+            print("")
+
         case 4: # MAXIMO DE 3 NUMEROS
+
             lista_ingresada = []
 
             for i in range(3):
                 lista_ingresada.append(validarNumeroIngresado())
 
             numero_maximo = calcularNumeroMaximo(lista_ingresada)
-            
             print(lista_ingresada)
             print(f"\nEl numero maximo de la lista es = {numero_maximo}")
+            print("")
 
-            print("View Messages")
         case 5: # INVERTIR CADENA
+
             cadena_ingresada = input("Ingrese una cadena de caracteres: ")
             lista_cadena = armarListaDeCaracteres(cadena_ingresada)
+            print("Cadena orignal: \n")
             print(lista_cadena)
             lista_cadena_invertida = invertirCadena(lista_cadena)
             print("")
+            print("Cadena invertida: \n")
             print(lista_cadena_invertida)
-        case 6:
-            print("View Posts")
-        case 7:
-            print("Search")
-        case 8:
-            print("View Notifications")
-        case 9:
-            print("Logout")
-        case 10:
-            print("bla bla")
+            print("")
+
+        case 6: # 
+            pass
+        case 7: #
+            pass
+        case 8: #
+            pass
+        case 9: #
+           pass
+        case 10: #
+            pass
         case _:
-            print("Invalid choice. Please try again.")
+            print("Opcion invalida. Vuelva a ingresa una opcion.")
