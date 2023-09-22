@@ -37,38 +37,165 @@ import os
 
 ### MENU DE OPCIONES ###
 
-# Function to clear the console
+# funcion para limpiar la consola
 def limpiar_consola():
     os.system('clear')
 
-# Define functions for each option
-def view_profile():
-    limpiar_consola()
-    print("Viewing Profile")
+# funciones del programa
 
-def update_settings():
-    limpiar_consola()
-    print("Updating Settings")
+def validarNumeroIngresado():
+    """
+    Valida si el usuario ingresa un numero valido.
 
-# Define functions for other options similarly
+    Returns:
+        float: Numero del usuario validado.
+    """
+    while True:
+        try:
+            numero_ingresado = input("Ingrese un numero: ")
+            numero = float(numero_ingresado)
+            return numero
+        except:
+            print("Numero ingresado invalido. Ingrese un numero valido.")
+
+def cargarListaDeNumeros():
+    """
+    Arma una lista de numeros ingresador por el usuario
+
+    Returns:
+        list: lista de numeros
+    """
+    lista_de_numeros = []
+
+    while True:
+        numero_ingresado = validarNumeroIngresado()
+        lista_de_numeros.append(numero_ingresado)
+
+        agregar_otro_numero = input("Desea agregar otro numero (s/n): ").lower()
+        if agregar_otro_numero != 's':
+            break
+
+    return lista_de_numeros
+
+def armarListaDeCaracteres(cadena):
+    """
+    Crea una lista a partir de una cadena
+
+    Args:
+        cadena (str): cadena de caracteres
+
+    Returns:
+        list: lista armada con la cadena de argumento
+    """
+    lista_de_caracteres = []
+    for caracter in cadena:
+        lista_de_caracteres.append(caracter)
+    return lista_de_caracteres
+
+def calcularAreaDeCirculo(radio):
+    """
+    Calcula el area de un circulo a partir de un raio ingresado por el usuario
+
+    Args:
+        radio (float): Numero ingresado por el usuario
+
+    Returns:
+        float: Area del circulo en base al radio ingresado como argumento
+    """
+    limpiar_consola()
+    print("Calcular Area de círculo")
+
+    area = radio ** 2 * 3.14 
+
+    return area
+
+def elNumeroEsPar(numero):
+    """
+    Valida si el numero ingresado es par o no
+
+    Args:
+        numero (float): Numero ingresado por el usario
+
+    Returns:
+        str: PAR si el numero ingresado como argumento es par o IMPAR si no lo es
+    """
+    limpiar_consola()
+    print("Numero Par o Impar")
+    if numero % 2 == 0:
+        respuesta = "PAR"
+    else:
+        respuesta = "IMPAR"
+    return respuesta
+
+def sumaDeNumeros(listaDeNumeros):
+    """
+    Calcula la suma total de una lista de numeros
+
+    Parameters:
+        listaDeNumeros (lista): Una lista de numeros.
+
+    Returns:
+        int o float: La suma total de los numeros de la lista.
+    """
+    limpiar_consola()
+    print("Suma de numeros")
+    suma = 0
+
+    for numero in listaDeNumeros:
+        suma += numero
+
+    return suma
+
+def calcularNumeroMaximo(listaDeNumeros):
+    """
+    Encuentra el numero maximo en la lista de numeros
+
+    Parameters:
+        listaDeNumeros (list): una lista de numeros
+
+    Returns:
+        float: el numero mas alto de la lista de numeros
+    """
+
+    numero_maximo = listaDeNumeros[0]
+
+    for numero in listaDeNumeros:
+        if numero >= numero_maximo:
+            numero_maximo = numero
+
+    return numero_maximo
+
+def invertirCadena(lista):
+    """
+    Invierte el orden de una lista de caracteres
+
+    Args:
+        lista (list): una lista de caracteres
+
+    Returns:
+        list: la lista con la cadena de caracteres invertida
+    """
+    lista_invertida = []
+    for i in range(len(lista)-1,-1,-1):
+        lista_invertida.append(lista[i])
+    return lista_invertida
+
+# funcion para salir del programa
 
 def salir_del_programa():
     limpiar_consola()
-    print("Exiting Program")
+    print("Saliendo del programa...")
     exit()
 
-# Function to clear the console
-def limpiar_consola():
-    os.system('clear')
 
 # menu
 while True:
-    print("========== Console Option Menu ==========")
-    print("1. View Profile")
-    print("2. Update Settings")
-    print("3. Send Message")
-    print("4. View Messages")
-    print("5. Create New Post")
+    print("============ Menu de opciones ===========")
+    print("1. Calcular el area de un cirlculo")
+    print("2. Numero Par o Impar")
+    print("3. Suma de numeros")
+    print("4. Maximo entre 3 numeros")
+    print("5. Invertir cadena")
     print("6. View Posts")
     print("7. Search")
     print("8. View Notifications")
@@ -78,11 +205,11 @@ while True:
     print("=========================================")
 
     while True:
-        choice = input("Please enter the number corresponding to your choice: ")
+        opcion_ingresada = input("Por favor ingrese el numero correspondiente a la opcion: ")
 
-        if choice.isdigit():
-            choice = int(choice)
-            if choice >= 0 and choice <= 10:
+        if opcion_ingresada.isdigit():
+            opcion_ingresada = int(opcion_ingresada)
+            if opcion_ingresada >= 0 and opcion_ingresada <= 10:
                 limpiar_consola()
                 break
             else:
@@ -90,21 +217,55 @@ while True:
         else:
             print("Invalid input. Please enter a valid number.")
 
-    # Match user's choice and print a message for each case
-    match choice:
-        case 0:
-            print("Saliendo del programa...")
-            exit()
-        case 1:
-            print("View Profile")
-        case 2:
-            print("Update Settings")
-        case 3:
-            print("Send Message")
-        case 4:
+    # OPCIONES INGRESADAS POR EL USUARIO
+    match opcion_ingresada:
+        case 0: # SALIR DEL PROGRAMA
+            salir_del_programa()
+        case 1: # AREA DEL CIRCULO
+            while True:
+                radio_ingresado = validarNumeroIngresado()
+
+                if radio_ingresado > 0 :
+                        limpiar_consola()
+                        break
+                else:
+                    print("Ingrese un numero entero positivo")
+
+            print(f"Area del circulo = {calcularAreaDeCirculo(radio_ingresado)}")
+            print("")
+
+        case 2: # NUMERO PAR OR IMPAR
+            numero_ingresado = validarNumeroIngresado()
+            respuesta = elNumeroEsPar(numero_ingresado)
+
+            print(f"El numero {numero_ingresado} es = {respuesta}")
+            print("")
+
+        case 3: # SUMA DE NUMEROS DE UNA LISTA
+            lista_ingresada = cargarListaDeNumeros()
+            suma_total = sumaDeNumeros(lista_ingresada)
+            print(lista_ingresada)
+            print(f"\nLa suma total de los numeros ingreados es = {suma_total}")
+            
+        case 4: # MAXIMO DE 3 NUMEROS
+            lista_ingresada = []
+
+            for i in range(3):
+                lista_ingresada.append(validarNumeroIngresado())
+
+            numero_maximo = calcularNumeroMaximo(lista_ingresada)
+            
+            print(lista_ingresada)
+            print(f"\nEl numero maximo de la lista es = {numero_maximo}")
+
             print("View Messages")
-        case 5:
-            print("Create New Post")
+        case 5: # INVERTIR CADENA
+            cadena_ingresada = input("Ingrese una cadena de caracteres: ")
+            lista_cadena = armarListaDeCaracteres(cadena_ingresada)
+            print(lista_cadena)
+            lista_cadena_invertida = invertirCadena(lista_cadena)
+            print("")
+            print(lista_cadena_invertida)
         case 6:
             print("View Posts")
         case 7:
