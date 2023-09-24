@@ -95,6 +95,25 @@ def cargarListaDeNumeros():
 
     return lista_de_numeros
 
+def cargarListaDePalabras():
+    """
+    Arma una lista con las palabras ingresadas por el usuario
+
+    Returns:
+        list: lista resultante de las palabras ingresadas
+    """
+    lista_de_palabras = []
+
+    while True:
+        palabra_ingresada = validarPalabraIngresada()
+        lista_de_palabras.append(palabra_ingresada)
+
+        agregar_otro_elemento = input("Desea agregar otra palabra (s/n): ").lower()
+        if agregar_otro_elemento != 's':
+            break
+
+    return lista_de_palabras
+
 def armarListaDeCaracteres(cadena):
     """
     Crea una lista a partir de una cadena
@@ -109,6 +128,20 @@ def armarListaDeCaracteres(cadena):
     for caracter in cadena:
         lista_de_caracteres.append(caracter)
     return lista_de_caracteres
+
+def validarPalabraIngresada():
+    """
+    Pide al usuario que ingrese un string que solo contenga letras y lo devuelve en caso que asi sea.
+
+    Returns:
+    str: El string ingresado si es valido.
+    """
+    while True:
+        string_ingresado = input("Ingrese una palabra: ")
+        if string_ingresado.isalpha():
+            return string_ingresado
+        else:
+            print("Palabra invalda. Por favor ingrese un string que solo contenga caracteres alfabeticos.")
 
 def calcularAreaDeCirculo(radio):
     """
@@ -127,6 +160,18 @@ def calcularAreaDeCirculo(radio):
 
     return area
 
+def esPar(numero):
+    """
+    Valida si el numero ingresado es par o no
+
+    Args:
+        numero (float): Numero ingresado por el usario
+
+    Returns:
+        bool: True si el numero ingresado como argumento es par o False si no lo es
+    """
+    return numero % 2 == 0
+
 def elNumeroEsPar(numero):
     """
     Valida si el numero ingresado es par o no
@@ -139,7 +184,7 @@ def elNumeroEsPar(numero):
     """
     limpiar_consola()
     print("Numero Par o Impar")
-    if numero % 2 == 0:
+    if esPar(numero):
         respuesta = "PAR"
     else:
         respuesta = "IMPAR"
@@ -197,6 +242,50 @@ def invertirCadena(lista):
     for i in range(len(lista)-1,-1,-1):
         lista_invertida.append(lista[i])
     return lista_invertida
+    
+def calcularPotencia(base,exponente):
+    """
+    Potencia un numero base por el exponente
+
+    Args:
+        base (float): base de la potencia
+        exponente (float): exponenente de la potencia
+
+    Returns:
+        float: el numero resultante de potenciar el argumente base por el argumente exponente
+    """
+    return base ** exponente
+
+def filtrarNumerosPares(lista_de_numeros):
+    """
+    Filtra una lista de numeros para separar los pares
+
+    Args:
+        lista_de_numeros (list): lista de numeros ingresada por el usuario
+
+    Returns:
+        list: lista de numeros que contiene solo los numeros pares de la lista ingresada
+    """
+    lista_de_pares = []
+    for numero in lista_de_numeros:
+        if esPar(numero):
+            lista_de_pares.append(numero)
+    return lista_de_pares
+
+def multiplicarNumerosDeLista(lista_de_numeros):
+    """
+    Multiplica todos los numeros de una lista
+
+    Args:
+        lista_de_numeros (list): lista de numeros ingresaada por el usuario
+
+    Returns:
+        float: el producto de todos los numeros de la lista
+    """
+    producto = 1
+    for numero in lista_de_numeros:
+        producto *= numero
+    return producto
 
 # funcion para salir del programa
 
@@ -217,7 +306,7 @@ while True:
     print("6. Palabras por orden alfabetico")
     print("7. Potencia de un numero")
     print("8. Lista de numeros pares")
-    print("9. Producto de numeros")
+    print("9. Producto de los numeros de una lista")
     print("10. Palindromo")
     print("0. Salir")
     print("=========================================")
@@ -288,15 +377,43 @@ while True:
             print(lista_cadena_invertida)
             print("")
 
-        case 6: # 
-            pass
-        case 7: #
-            pass
-        case 8: #
-            pass
-        case 9: #
-           pass
-        case 10: #
+        case 6: # ORDEN ALFABETICO 
+            lista_ingresada = cargarListaDePalabras()
+            print("Lista orignal: \n")
+            print(lista_ingresada)
+            lista_ingresada.sort()
+            print("")
+            print("Lista ordenada alfabeticamente: \n")
+            print(lista_ingresada)
+            print("")
+
+        case 7: # POTENCIA DE UN NUMERO
+            print("Ingrese la base de la potencia a realizar \n")
+            base = validarNumeroIngresado()
+            print("A continuacion ingrese el exponente de la potencia a realizar \n")
+            exponente = validarNumeroIngresado()
+            resultado = calcularPotencia(base,exponente)
+            print("")
+            print(f"El resultado de la potencia: {base} ^ {exponente} = {resultado}")
+            print("")
+        case 8: # LISTA DE NUMEROS PARES
+            print("Ingrese la cantidad de numeros que desee a continuacion: \n")
+            lista_de_numeros = cargarListaDeNumeros()
+            print("Lista original: \n")
+            print(lista_de_numeros)
+            print("")
+            lista_de_numeros_pares = filtrarNumerosPares(lista_de_numeros)
+            print("Lista de numeros pares resultante: \n")
+            print(lista_de_numeros_pares)
+            print("")
+
+        case 9: # PRODUCTO DE NUMEROS
+            print("Ingrese una serie de numeros a continuacion: ")
+            resultado = multiplicarNumerosDeLista(cargarListaDeNumeros())
+            print("Lista de numeros: \n")
+            print("")
+            print(f"El resultado de multiplicar los numeros de la lista es = {resultado}")
+        case 10: # PALINDROMO
             pass
         case _:
             print("Opcion invalida. Vuelva a ingresa una opcion.")
