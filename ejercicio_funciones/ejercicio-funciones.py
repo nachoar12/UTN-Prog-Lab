@@ -287,6 +287,28 @@ def multiplicarNumerosDeLista(lista_de_numeros):
         producto *= numero
     return producto
 
+def esPalindromo(cadena):
+    """
+    Recibe una cadena y verifica si es palindromo
+    Args:
+        cadena (list): lista de caracteres 
+    Returns:
+        str: retorna si la cadena es palindromo o no
+    """
+    for char in cadena:
+        char.lower()
+        
+    cadena_invertida = invertirCadena(cadena)
+    respuesta = 0
+    for i in range(len(cadena)-1):
+        if cadena[i] == cadena_invertida[i]:
+            respuesta += 1
+    if respuesta == len(cadena)-1:
+        respuesta = "Es palindromo"
+    else:
+        respuesta = "No es palindromo"
+    return respuesta
+
 # funcion para salir del programa
 
 def salir_del_programa():
@@ -414,6 +436,10 @@ while True:
             print("")
             print(f"El resultado de multiplicar los numeros de la lista es = {resultado}")
         case 10: # PALINDROMO
-            pass
+            print("Ingrese una cadena de string a continuacion para saber si es palindromo o no: ")
+            cadena_ingresada = armarListaDeCaracteres(cargarListaDePalabras())
+            print("")
+            respuesta = esPalindromo(cadena_ingresada)
+            print(respuesta)
         case _:
             print("Opcion invalida. Vuelva a ingresa una opcion.")
