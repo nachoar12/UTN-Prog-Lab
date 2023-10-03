@@ -71,7 +71,7 @@ def mostrar_nombres_y_altura():
     num_heroe = 0
     for heroe in lista_personajes:
         num_heroe += 1
-        print(f"Heroe Nº {num_heroe} - {heroe['nombre']} | Altura: {reducir_num(heroe['altura'])} KG")
+        print(f"Heroe Nº {num_heroe} - {heroe['nombre']} | Altura: {reducir_num(heroe['altura'])} CM")
 
 
 def mostrar_super_mas_alto():
