@@ -43,7 +43,7 @@ bloques = []
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()},
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()}]
 
-for i in range(50):
+for i in range(40):
 
         rect = pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT)
         color = generate_random_color()
@@ -57,7 +57,7 @@ while is_running:
     CLOCK.tick(FPS)
     # -----> Detectar los eventos
     for e in pygame.event.get():
-        print(e)
+        # print(e)
         if e.type == pygame.QUIT:
             is_running = False
     
