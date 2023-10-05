@@ -290,6 +290,7 @@ def mostrar_segun_color_de_ojos():
     # Implementación para la opción 17
     print("Mostrar cuantos hay segun color de ojos.\n")
     for heroe in lista_personajes:
+        pass
 
 
 def listar_color_de_ojos():
