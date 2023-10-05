@@ -8,7 +8,8 @@ CENTER_SCREEN = (WIDTH // 2, HEIGHT // 2)
 
 # cuadros por segundo para el muestreo de pantalla
 FPS = 60
-SPEED = randrange(15)
+SPEED = 5
+
 
 # colours
 

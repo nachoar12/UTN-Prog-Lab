@@ -18,8 +18,6 @@ is_running = True
 CLOCK = pygame.time.Clock()
 CLOCK = Clock()
 
-RADIO = 100
-
 # config de la pantalla principal
 pygame.display.set_caption("Game Test")
 VENTANA = pygame.display.set_mode(SCREEN_SIZE)
@@ -31,9 +29,15 @@ DOWNRIGHT = 3
 DOWNLEFT = 1
 UPLEFT = 7
 
+speed_x = 5
+speed_y = 5
+radio = -1
+
 # dimensiones del rectangulo
 BLOCK_WIDTH = 25
 BLOCK_HEIGHT = 25
+BORDER = 0
+RADIO = -1
 
 
 # rectangulos
@@ -43,13 +47,18 @@ bloques = []
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()},
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()}]
 
-for i in range(50):
+for i in range(5):
 
-        rect = pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT)
+        rect = pygame.Rect( randint(0, WIDTH - BLOCK_WIDTH),
+                            randint(0, HEIGHT - BLOCK_HEIGHT), 
+                            BLOCK_WIDTH, 
+                            BLOCK_HEIGHT)
         color = generate_random_color()
         dir = get_random_direction()
+        speed_x = randint(5,15)
+        speed_y = randint(5,15)
 
-        block_dict = {"rect": rect, "color": color, "dir": dir}
+        block_dict = {"rect": rect, "color": color, "dir": dir, "speed_x": speed_x, "speed_y": speed_y}
         bloques.append(block_dict)
     
 
@@ -77,39 +86,43 @@ while is_running:
                 block["dir"] = DOWNLEFT
             elif block["dir"] == UPRIGHT:
                 block["dir"] = UPLEFT
+            block["color"] = generate_random_color()
         # rebote izquierda pantalla
         elif block["rect"].left <= 0:
             if block["dir"] == DOWNLEFT:
                 block["dir"] = DOWNRIGHT
             elif block["dir"] == UPLEFT:
                 block["dir"] = UPRIGHT
+            block["color"] = generate_random_color()
         # rebote abajo pantalla
         elif block["rect"].bottom >= HEIGHT:
             if block["dir"] == DOWNLEFT:
                 block["dir"] = UPLEFT
             elif block["dir"] == DOWNRIGHT:
                 block["dir"] = UPRIGHT
+            block["color"] = generate_random_color()
         # rebote arriba pantalla
         elif block["rect"].top <= 0:
             if block["dir"] == UPLEFT:
                 block["dir"] = DOWNLEFT
             elif block["dir"] == UPRIGHT:
                 block["dir"] = DOWNRIGHT
+            block["color"] = generate_random_color()
 
     for block in bloques:
         # muevo el rectangulo de acuerdo a la direccion
         if block["dir"] == DOWNRIGHT:
-            block["rect"].left += SPEED
-            block["rect"].top += SPEED
+            block["rect"].left += speed_x
+            block["rect"].top += speed_y
         elif block["dir"] == DOWNLEFT:
-            block["rect"].left -= SPEED
-            block["rect"].top += SPEED
+            block["rect"].left -= speed_x
+            block["rect"].top += speed_y
         elif block["dir"] == UPLEFT:
-            block["rect"].left -= SPEED
-            block["rect"].top -= SPEED
+            block["rect"].left -= speed_x
+            block["rect"].top -= speed_y
         elif block["dir"] == UPRIGHT:
-            block["rect"].left += SPEED
-            block["rect"].top -= SPEED
+            block["rect"].left += speed_x
+            block["rect"].top -= speed_y
 
     # -----> Dibujar pantalla
     VENTANA.fill(black)
