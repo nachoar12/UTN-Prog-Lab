@@ -21,7 +21,7 @@ def mostrar_menu():
     print("║ 13. El superheroe femenino mas bajo.                         ║")
     print("║ 14. Altura promedio de los superheroes masculinos.           ║")
     print("║ 15. Altura promedio de los superheroes femeninos.            ║")
-    print("║ 16. Superhore masculino mas alto y femenino mas bajo.        ║")
+    print("║ 16. Superheroes mas bajos y altos por genero.                ║")
     print("║ 17. Mostrar cuantos hay segun color de ojos.                 ║")
     print("║ 18. Mostrar cuantos hay segun color de pelo.                 ║")
     print("║ 19. Mostrar cuantos hay segun inteligencia.                  ║")

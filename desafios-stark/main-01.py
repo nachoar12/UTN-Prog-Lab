@@ -37,7 +37,7 @@ def elegir_opcion(opcion_usuario):
     elif opcion_usuario == 15:
         promedio_altura_femeninos()
     elif opcion_usuario == 16:
-        nombre_masc_mas_alto_y_fem_mas_bajo()
+        super_mas_altos_y_bajos_por_genero()
     elif opcion_usuario == 17:
         mostrar_segun_color_de_ojos()
     elif opcion_usuario == 18:
@@ -64,7 +64,6 @@ while True:
         break
     else:
         limpiar_pantalla()   
-        print(f"Ha elegido la opción {opcion_usuario}\n")
         elegir_opcion(opcion_usuario)
         input("\nPresione Enter para volver al menú.")
     

@@ -174,7 +174,6 @@ def super_masculino_mas_alto():
     Muestra y devuelve el superhéroe masculino más alto y su altura.
     """
     # Implementación para la opción 10
-    print("El superheroe masculino mas alto.\n")
     altura_max = None
     masculino_mas_alto = ""
     for heroe in lista_personajes:
@@ -192,7 +191,6 @@ def super_femenino_mas_alto():
     Muestra el superhéroe femenino más alto y su altura.
     """
     # Implementación para la opción 11
-    print("El superheroe femenino mas alto.\n")
     altura_max = None
     femenino_mas_alto = ""
     for heroe in lista_personajes:
@@ -210,7 +208,6 @@ def super_masculino_mas_bajo():
     Muestra el superhéroe masculino más bajo y su altura.
     """
     # Implementación para la opción 12
-    print("El superheroe masculino mas bajo.\n")
     altura_min = None
     masculino_mas_bajo = ""
     for heroe in lista_personajes:
@@ -227,8 +224,6 @@ def super_femenino_mas_bajo():
     Muestra y devuelve el superhéroe femenino más bajo y su altura.
     """
     # Implementación para la opción 13
-    
-    print("El superheroe femenino mas bajo.\n")
     altura_min = None
     femenino_mas_bajo = ""
     for heroe in lista_personajes:
@@ -273,13 +268,16 @@ def promedio_altura_femeninos():
     altura_promedio = suma_de_alturas // contador_de_alturas
     print(f"La altura promedio de los superheroes femeninos es = {altura_promedio} CM")
 
-def nombre_masc_mas_alto_y_fem_mas_bajo():
+def super_mas_altos_y_bajos_por_genero():
     """
-    Muestra el nombre del superheroe masculino mas alto y el nombre del superheroe femenino mas bajo.
+    Muestra los nombres de los superhores mas altos y bajos de ambos generos.
     """
     # Implementación para la opción 16
-    print("El superheroe masculino mas alto y el femenino mas bajo .\n")
     super_masculino_mas_alto()
+    print("")
+    super_masculino_mas_bajo()
+    print("")
+    super_femenino_mas_alto()
     print("")
     super_femenino_mas_bajo()
 
@@ -289,31 +287,31 @@ def mostrar_segun_color_de_ojos():
     """
     # Implementación para la opción 17
     print("Mostrar cuantos hay segun color de ojos.\n")
+    dict_de_ojos = {}
     for heroe in lista_personajes:
-        pass
+        if not heroe["color_ojos"] in dict_de_ojos:
+            dict_de_ojos[heroe["color_ojos"]] = 1
+        else:
+            dict_de_ojos[heroe["color_ojos"]] += 1
 
-
-def listar_color_de_ojos():
-    """
-    Genera y devuelve una lista con los disintos colores de ojos de los superheroes.
-
-    Returns:
-        list: lista que contiene los disintos colores de ojos.
-    """
-    # Implementación para la opción 18
-
-    lista_de_ojos = []
-    for heroe in lista_personajes:
-        lista_de_ojos = heroe["color_ojos"]
-    
-    return lista_de_ojos
+    for color in dict_de_ojos:
+        print(f"Heroes con color de ojos {color} = {dict_de_ojos.get(color)}")
 
 def mostrar_segun_color_de_pelo():
     """
-    Muestra el superhéroe femenimasculinono más bajo y su altura.
+    Muestra la cantidad de heroes que hay segun el color de pelo
     """
     # Implementación para la opción 18
-    print("El superheroe masculino mas bajo.\n")
+    print("Mostrar cuantos hay segun color de pelo.\n")
+    dict_de_pelo = {}
+    for heroe in lista_personajes:
+        if not heroe["color_pelo"] in dict_de_pelo:
+            dict_de_pelo[heroe["color_pelo"]] = 1
+        else:
+            dict_de_pelo[heroe["color_pelo"]] += 1
+
+    for color in dict_de_pelo:
+        print(f"Heroes con color de pelo {color} = {dict_de_pelo.get(color)}")
 
 def mostrar_segun_inteligencia():
     """
