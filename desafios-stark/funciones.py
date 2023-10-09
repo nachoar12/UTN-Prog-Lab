@@ -338,7 +338,8 @@ def listar_segun_color_de_ojos():
     """
     # Implementación para la opción 20
     print("Mostrar una lista de los heroes segun color de ojos.\n")
-    pass            
+    lista_a_mostrar = [ {"color": "color"},{"nombre": "nombre"} ]
+
 
 def listar_segun_color_de_pelo():
     """

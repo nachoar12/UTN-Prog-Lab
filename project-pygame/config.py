@@ -10,6 +10,22 @@ CENTER_SCREEN = (WIDTH // 2, HEIGHT // 2)
 FPS = 60
 SPEED = 5
 
+# dimensiones del rectangulo
+BLOCK_WIDTH = 25
+BLOCK_HEIGHT = 25
+BORDER = 0
+RADIO = -1
+
+# direcciones
+UPRIGHT = 9
+DOWNRIGHT = 3
+DOWNLEFT = 1
+UPLEFT = 7
+
+speed_x = 5
+speed_y = 5
+radio = -1
+
 
 # colours
 

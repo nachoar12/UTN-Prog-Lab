@@ -3,6 +3,7 @@ from aleatorias import generate_random_color, get_random_direction, create_block
 from random import randint, randrange
 from pygame.time import Clock
 from config import *
+from pygame.locals import *
 
 # inicializar los modulos de pygame
 pygame.init()
@@ -26,16 +27,10 @@ contador_gde = 0
 
 # movimiento 
 
-
-
-
-
-
-
-
-
-
-
+move_left = False
+move_right = False
+move_down = False
+move_up = False
 
 
 
@@ -46,7 +41,7 @@ bloques = []
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()},
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()}]
 
-for i in range(50):
+for i in range(5):
 
         rect = pygame.Rect( randint(0, WIDTH - BLOCK_WIDTH),
                             randint(0, HEIGHT - BLOCK_HEIGHT), 
@@ -72,7 +67,36 @@ while is_running:
 
         if e.type == EVENT_NEW_COIN:
             pass
+        
+        # evento al presionar la tecla
+        if e.type == pygame.KEYDOWN:
+            # teclas de movimiento WASD y flechas
+            if e.key == pygame.K_RIGHT or e.key == K_d:
+                move_right = True
+            if e.key == pygame.K_LEFT or e.key == K_a:
+                move_left = True
+            if e.key == pygame.K_DOWN or e.key == K_s:
+                move_down = True
+            if e.key == pygame.K_UP or e.key == K_w:
+                move_up = True
+
+        # evento al soltar la tecla
+        if e.type == pygame.KEYUP:
+            # teclas de movimiento WASD y flechas
+            if e.key == pygame.K_RIGHT or e.key == K_d:
+                move_right = False
+            if e.key == pygame.K_LEFT or e.key == K_a:
+                move_left = False
+            if e.key == pygame.K_DOWN or e.key == K_s:
+                move_down = False
+            if e.key == pygame.K_UP or e.key == K_w:
+                move_up = False
+            # tecla para cerrar el juego Esc
+            if e.key == K_ESCAPE:
+                is_running = False
+
             
+
     # dibujo formas geometricas
 
     # circulo_central = draw.circle(VENTANA, yellow, CENTER_SCREEN , RADIO)
@@ -114,22 +138,18 @@ while is_running:
 
     for block in bloques:
         # muevo el rectangulo de acuerdo a la direccion
-        if block["dir"] == DOWNRIGHT:
+        if move_right:
             # DERECHA
             block["rect"].left += speed_x
-            block["rect"].top += speed_y
-        elif block["dir"] == DOWNLEFT:
+        elif move_left:
             # IZQUIERDA
             block["rect"].left -= speed_x
-            block["rect"].top += speed_y
-        elif block["dir"] == UPLEFT:
+        elif move_up:
             # ARRIBA
-            block["rect"].left -= speed_x
             block["rect"].top -= speed_y
-        elif block["dir"] == UPRIGHT:
+        elif move_down:
             # ABAJO
-            block["rect"].left += speed_x
-            block["rect"].top -= speed_y
+            block["rect"].top += speed_y
 
     # -----> Dibujar pantalla
     VENTANA.fill(black)
