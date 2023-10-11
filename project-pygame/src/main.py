@@ -3,7 +3,6 @@ from aleatorias import generate_random_color, get_random_direction, create_block
 from random import randint, randrange
 from pygame.time import Clock
 from config import *
-from pygame.locals import *
 
 # inicializar los modulos de pygame
 pygame.init()
@@ -25,13 +24,7 @@ pygame.time.set_timer(EVENT_NEW_COIN, 3000)
 contador = 0
 contador_gde = 0
 
-# movimiento 
-
-move_left = False
-move_right = False
-move_down = False
-move_up = False
-
+# movimiento
 
 
 # rectangulos
@@ -41,20 +34,21 @@ bloques = []
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()},
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()}]
 
-for i in range(1):
+for i in range(50):
 
-        rect = pygame.Rect( randint(0, WIDTH - BLOCK_WIDTH),
-                            randint(0, HEIGHT - BLOCK_HEIGHT), 
-                            BLOCK_WIDTH, 
-                            BLOCK_HEIGHT)
-        color = generate_random_color()
-        dir = get_random_direction()
-        speed_x = randint(5,15)
-        speed_y = randint(5,15)
+    rect = pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH),
+                       randint(0, HEIGHT - BLOCK_HEIGHT),
+                       BLOCK_WIDTH,
+                       BLOCK_HEIGHT)
+    color = generate_random_color()
+    dir = get_random_direction()
+    speed_x = randint(5, 15)
+    speed_y = randint(5, 15)
 
-        block_dict = {"rect": rect, "color": color, "dir": dir, "speed_x": speed_x, "speed_y": speed_y}
-        bloques.append(block_dict)
-    
+    block_dict = {"rect": rect, "color": color,
+                  "dir": dir, "speed_x": speed_x, "speed_y": speed_y}
+    bloques.append(block_dict)
+
 is_running = True
 
 while is_running:
@@ -67,35 +61,6 @@ while is_running:
 
         if e.type == EVENT_NEW_COIN:
             pass
-        
-        # evento al presionar la tecla
-        if e.type == pygame.KEYDOWN:
-            # teclas de movimiento WASD y flechas
-            if e.key == pygame.K_RIGHT or e.key == K_d:
-                move_right = True
-            if e.key == pygame.K_LEFT or e.key == K_a:
-                move_left = True
-            if e.key == pygame.K_DOWN or e.key == K_s:
-                move_down = True
-            if e.key == pygame.K_UP or e.key == K_w:
-                move_up = True
-
-        # evento al soltar la tecla
-        if e.type == pygame.KEYUP:
-            # teclas de movimiento WASD y flechas
-            if e.key == pygame.K_RIGHT or e.key == K_d:
-                move_right = False
-            if e.key == pygame.K_LEFT or e.key == K_a:
-                move_left = False
-            if e.key == pygame.K_DOWN or e.key == K_s:
-                move_down = False
-            if e.key == pygame.K_UP or e.key == K_w:
-                move_up = False
-            # tecla para cerrar el juego Esc
-            if e.key == K_ESCAPE:
-                is_running = False
-
-            
 
     # dibujo formas geometricas
 
@@ -138,18 +103,22 @@ while is_running:
 
     for block in bloques:
         # muevo el rectangulo de acuerdo a la direccion
-        if move_right:
+        if block["dir"] == DOWNRIGHT:
             # DERECHA
             block["rect"].left += speed_x
-        elif move_left:
+            block["rect"].top += speed_y
+        elif block["dir"] == DOWNLEFT:
             # IZQUIERDA
             block["rect"].left -= speed_x
-        elif move_up:
-            # ARRIBA
-            block["rect"].top -= speed_y
-        elif move_down:
-            # ABAJO
             block["rect"].top += speed_y
+        elif block["dir"] == UPLEFT:
+            # ARRIBA
+            block["rect"].left -= speed_x
+            block["rect"].top -= speed_y
+        elif block["dir"] == UPRIGHT:
+            # ABAJO
+            block["rect"].left += speed_x
+            block["rect"].top -= speed_y
 
     # -----> Dibujar pantalla
     VENTANA.fill(black)
@@ -158,8 +127,5 @@ while is_running:
 
     # -----> Actualizar pantalla
     pygame.display.flip()
-    
-pygame.quit()
-    
 
-   
+pygame.quit()

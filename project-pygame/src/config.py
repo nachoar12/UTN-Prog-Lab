@@ -16,6 +16,11 @@ BLOCK_HEIGHT = 50
 BORDER = 0
 RADIO = -1
 
+# dimensiones de las monedas
+size_coin = 25
+size_min_coin = 20
+size_max_coin = 40
+
 # direcciones
 UPRIGHT = 9
 DOWNRIGHT = 3
