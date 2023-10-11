@@ -337,23 +337,11 @@ def listar_segun_color_de_ojos():
     Muestra una lista de heroes que hay segun el color de ojos.
     """
     # Implementación para la opción 20
-    print("Mostrar una lista de los heroes segun color de ojos.\n")
-    dict_de_color = {"color": "color"}
-    dict_de_nombre = {"nombre": "nombre"}
-    lista = []
-    for heroe in lista_personajes:
-        if not heroe["color_ojos"] in dict_de_color:
-            dict_de_color = {heroe["color_ojos"]}
-            dict_de_nombre = {heroe["nombre"]}
-            lista.append(dict_de_color)
-            lista.append(dict_de_nombre)
-        else:
-            dict_de_nombre = {heroe["nombre"]}
-            lista.append(dict_de_nombre)
+    print("Mostrar una lista de los heroes segun color de ojos \n")
+    dict_de_ojos = {}
+    dict_de_nombres = {}
+    pass    
 
-    print("")
-    print(lista)
-  
 
 def listar_segun_color_de_pelo():
     """
