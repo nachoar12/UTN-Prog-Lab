@@ -34,7 +34,7 @@ bloques = []
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()},
 #            {"rect": pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH), randint(0, HEIGHT - BLOCK_HEIGHT), BLOCK_WIDTH, BLOCK_HEIGHT), "color": generate_random_color(), "dir": get_random_direction()}]
 
-for i in range(50):
+for i in range(5):
 
     rect = pygame.Rect(randint(0, WIDTH - BLOCK_WIDTH),
                        randint(0, HEIGHT - BLOCK_HEIGHT),
@@ -61,13 +61,6 @@ while is_running:
 
         if e.type == EVENT_NEW_COIN:
             pass
-
-    # dibujo formas geometricas
-
-    # circulo_central = draw.circle(VENTANA, yellow, CENTER_SCREEN , RADIO)
-    # draw.circle(VENTANA, red, (WIDTH - RADIO, RADIO) , RADIO)
-    # draw.circle(VENTANA, green, (RADIO, HEIGHT - RADIO ) , RADIO)
-    # draw.line(VENTANA, black, (0,0),(WIDTH, HEIGHT), 5)
 
     # -----> Actualizar elementos
     # controlo rebotes y cambio de direccion
