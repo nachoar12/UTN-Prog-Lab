@@ -10,6 +10,9 @@ CENTER_SCREEN = (WIDTH // 2, HEIGHT // 2)
 FPS = 60
 SPEED = 5
 
+BUTTON_WIDTH = 200
+BUTTONG_HEIGHT = 50
+
 # dimensiones del rectangulo
 BLOCK_WIDTH = 50
 BLOCK_HEIGHT = 50

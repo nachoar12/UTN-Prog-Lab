@@ -26,6 +26,11 @@ contador_gde = 0
 
 # movimiento
 
+# dimensiones del rectangulo
+BLOCK_WIDTH = 50
+BLOCK_HEIGHT = 50
+BORDER = 0
+RADIO = -1
 
 # rectangulos
 bloques = []

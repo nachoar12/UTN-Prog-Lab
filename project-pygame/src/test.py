@@ -5,6 +5,8 @@ from pygame.time import Clock
 from config import *
 from pygame.locals import *
 from colisiones import *
+from utils import *
+
 
 # inicializar los modulos de pygame
 pygame.init()
@@ -15,10 +17,10 @@ def terminar():
     exit()
 
 
-def mostrar_texto(texto, fuente, coordenadas, color_fuente, color_fondo):
-    texto = fuente.render
+# def mostrar_texto(texto, fuente, coordenadas, color_fuente, color_fondo):
+#     texto = fuente.render
 
-    pass
+#     pass
 
 
 def wait_user():
@@ -33,14 +35,33 @@ def wait_user():
                 return
 
 
+def wait_user_click(rect_1: pygame.Rect):
+    while True:
+        crear_boton(SCREEN, rect_1, "Comenzar", blue, green)
+        pygame.display.flip()
+        for evento in pygame.event.get():
+            if evento.type == QUIT:
+                terminar()
+
+            if evento.type == KEYDOWN:
+                if evento.key == K_ESCAPE:
+                    terminar()
+
+            if evento.type == MOUSEBUTTONDOWN:
+                if evento.button == 1:
+                    if rect_1.collidepoint(evento.pos):
+                        return None
+
+
 # config de la pantalla principal
 pygame.display.set_caption("Game Test")
-VENTANA = pygame.display.set_mode(SCREEN_SIZE)
-VENTANA.fill((white))
+SCREEN = pygame.display.set_mode(SCREEN_SIZE)
+SCREEN.fill((white))
 
 # creo un reloj
 CLOCK = pygame.time.Clock()
 CLOCK = Clock()
+
 
 # seteo sonidos
 # coin_sound = pygame.mixer.Sound("./src/assets/'nombredelarchivo'")
@@ -57,7 +78,6 @@ playing_music = True
 # background = pygame.transform.scale(pygame.image.load("./src/assets/fondo"),SCREEN_SIZE)
 
 # evento personalizado
-EVENT_NEW_COIN = pygame.USEREVENT + 1
 
 pygame.time.set_timer(EVENT_NEW_COIN, 3000)
 
@@ -82,13 +102,6 @@ def crear_bloque(imagen=None, left=0, top=0, width=BLOCK_WIDTH, height=BLOCK_HEI
 
 def handler_new_coin():
     pass
-
-
-def load_coin_list(coins, cantidad):
-    for i in range(cantidad):
-        size_coin = randint(size_min_coin, size_max_coin)
-        coins.append(crear_bloque(None, randint(0, WIDTH - size_coin), randint(0,
-                     HEIGHT - size_coin), size_coin, size_coin, yellow, radio=size_coin // 2))
 
 
 def dibujar_asteroides(superficie, coins):
@@ -126,146 +139,110 @@ for i in range(1):
 coins = []
 # load_coins_list(coins,count_coins)
 
-is_running = True
+rect_comenzar = pygame.Rect(0, 0, BUTTON_WIDTH, BUTTONG_HEIGHT)
+rect_comenzar.center = CENTER_SCREEN
+button_comenzar = rect_comenzar
+pygame.display.flip
+wait_user_click(button_comenzar)
 
-while is_running:
-    CLOCK.tick(FPS)
-    # -----> Detectar los eventos
-    for e in pygame.event.get():
-        # print(e)
-        if e.type == pygame.QUIT:
-            is_running = False
+while True:
 
-        if e.type == EVENT_NEW_COIN:
-            pass
+    # pantalla de inicio
+    SCREEN.fill(black)
+    mostrar_texto(SCREEN, "Asteroides", fuente, ())
+    mostrar_texto(SCREEN, "Presione una tecla para comenzar...",
+                  fuente, (WIDTH // 2, HEIGHT // 2), white)
+    pygame.display.flip
+    wait_user()
 
-        # evento al presionar la tecla
-        if e.type == pygame.KEYDOWN:
-            # teclas de movimiento WASD y flechas
-            if e.key == pygame.K_RIGHT or e.key == K_d:
-                move_right = True
-                move_left = False
-            if e.key == pygame.K_LEFT or e.key == K_a:
-                move_left = True
-                move_right = False
-            if e.key == pygame.K_DOWN or e.key == K_s:
-                move_down = True
-                move_up = False
-            if e.key == pygame.K_UP or e.key == K_w:
-                move_up = True
-                move_down = False
+    # inicializacion del juego
+    lives = 3
+    pygame.mouse.set_visible(False)
+    contador = 0
 
-        # evento al soltar la tecla
-        if e.type == pygame.KEYUP:
-            # teclas de movimiento WASD y flechas
-            if e.key == pygame.K_RIGHT or e.key == K_d:
-                move_right = False
-            if e.key == pygame.K_LEFT or e.key == K_a:
-                move_left = False
-            if e.key == pygame.K_DOWN or e.key == K_s:
-                move_down = False
-            if e.key == pygame.K_UP or e.key == K_w:
-                move_up = False
-            # tecla para cerrar el juego Esc
-            if e.key == K_ESCAPE:
+    texto = fuente.render(f"Coins: {contador}", True, magenta)
+    rect_texto = texto.get_rect(topleft=(30, 40))
+
+    texto_lives = fuente.render(f"Lives: {lives}", True, magenta)
+    rect_texto_lives = texto.get_rect(topright=(WIDTH - 30, 40))
+
+    is_running = True
+
+    while is_running:
+        CLOCK.tick(FPS)
+        # -----> Detectar los eventos
+        for e in pygame.event.get():
+            # print(e)
+            if e.type == pygame.QUIT:
                 is_running = False
 
-        if e.type == MOUSEBUTTONDOWN:
-            if e.button == 1:
-                new_coin = (crear_bloque(
-                    e.pos[0], e.pos[1], size_coin, color=cyan, radio=size_coin // 2))
-                new_coin["rect"].left -= size_coin // 2
-                new_coin["rect"].top -= size_coin // 2
-                coins.append(new_coin)
-            if e.button == 3:
-                block["rect"].center = CENTER_SCREEN
+            # evento al presionar la tecla
+            if e.type == pygame.KEYDOWN:
+                # teclas de movimiento WASD y flechas
+                if e.key == pygame.K_RIGHT or e.key == K_d:
+                    move_right = True
+                    move_left = False
+                if e.key == pygame.K_LEFT or e.key == K_a:
+                    move_left = True
+                    move_right = False
+                if e.key == pygame.K_DOWN or e.key == K_s:
+                    move_down = True
+                    move_up = False
+                if e.key == pygame.K_UP or e.key == K_w:
+                    move_up = True
+                    move_down = False
 
-    # dibujo formas geometricas
+            # evento al soltar la tecla
+            if e.type == pygame.KEYUP:
+                # teclas de movimiento WASD y flechas
+                if e.key == pygame.K_RIGHT or e.key == K_d:
+                    move_right = False
+                if e.key == pygame.K_LEFT or e.key == K_a:
+                    move_left = False
+                if e.key == pygame.K_DOWN or e.key == K_s:
+                    move_down = False
+                if e.key == pygame.K_UP or e.key == K_w:
+                    move_up = False
+                # tecla para cerrar el juego Esc
+                if e.key == K_ESCAPE:
+                    is_running = False
 
-    # circulo_central = draw.circle(VENTANA, yellow, CENTER_SCREEN , RADIO)
-    # draw.circle(VENTANA, red, (WIDTH - RADIO, RADIO) , RADIO)
-    # draw.circle(VENTANA, green, (RADIO, HEIGHT - RADIO ) , RADIO)
-    # draw.line(VENTANA, black, (0,0),(WIDTH, HEIGHT), 5)
+            if e.type == MOUSEBUTTONDOWN:
+                if e.button == 1:
+                    new_coin = (crear_bloque(
+                        e.pos[0], e.pos[1], size_coin, color=cyan, radio=size_coin // 2))
+                    new_coin["rect"].left -= size_coin // 2
+                    new_coin["rect"].top -= size_coin // 2
+                    coins.append(new_coin)
+                if e.button == 3:
+                    block["rect"].center = CENTER_SCREEN
 
-    # -----> Actualizar elementos
-    # controlo rebotes y cambio de direccion
-    # for block in bloques:
-    #     # rebote derecha pantalla
-    #     if block["rect"].right >= WIDTH:
-    #         if block["dir"] == DOWNRIGHT:
-    #             block["dir"] = DOWNLEFT
-    #         elif block["dir"] == UPRIGHT:
-    #             block["dir"] = UPLEFT
-    #     # rebote izquierda pantalla
-    #     elif block["rect"].left <= 0:
-    #         if block["dir"] == DOWNLEFT:
-    #             block["dir"] = DOWNRIGHT
-    #         elif block["dir"] == UPLEFT:
-    #             block["dir"] = UPRIGHT
-    #     # rebote abajo pantalla
-    #     elif block["rect"].bottom >= HEIGHT:
-    #         if block["dir"] == DOWNLEFT:
-    #             block["dir"] = UPLEFT
-    #         elif block["dir"] == DOWNRIGHT:
-    #             block["dir"] = UPRIGHT
-    #     # rebote arriba pantalla
-    #     elif block["rect"].top <= 0:
-    #         if block["dir"] == UPLEFT:
-    #             block["dir"] = DOWNLEFT
-    #         elif block["dir"] == UPRIGHT:
-    #             block["dir"] = DOWNRIGHT
+        for block in bloques:
+            # muevo el rectangulo de acuerdo a la direccion
+            if move_right and block["rect"].right <= (WIDTH - SPEED):
+                # DERECHA
+                block["rect"].left += speed_x
+            elif move_left and block["rect"].left >= (0 + SPEED):
+                # IZQUIERDA
+                block["rect"].left -= speed_x
+            elif move_up and block["rect"].top >= (0 + SPEED):
+                # ARRIBA
+                block["rect"].top -= speed_y
+            elif move_down and block["rect"].bottom <= (HEIGHT - SPEED):
+                # ABAJO
+                block["rect"].top += speed_y
 
-    for block in bloques:
-        # muevo el rectangulo de acuerdo a la direccion
-        if move_right and block["rect"].right <= (WIDTH - SPEED):
-            # DERECHA
-            block["rect"].left += speed_x
-        elif move_left and block["rect"].left >= (0 + SPEED):
-            # IZQUIERDA
-            block["rect"].left -= speed_x
-        elif move_up and block["rect"].top >= (0 + SPEED):
-            # ARRIBA
-            block["rect"].top -= speed_y
-        elif move_down and block["rect"].bottom <= (HEIGHT - SPEED):
-            # ABAJO
-            block["rect"].top += speed_y
+        # -----> Dibujar pantalla
 
-        # movemos los asteroides
-
+        SCREEN.fill(black)
         for coin in coins:
-            coin["rect"].move_ip(0, coin["speed_y"])
+            pygame.draw.rect(SCREEN, coin["color"],
+                             coin["rect"], coin["borde", coin["radio"]])
 
-        # reaparecerlos desde arriba de la pantalla
+        for block in bloques:
+            pygame.draw.rect(SCREEN, block["color"], block["rect"])
 
-        for coin in coins:
-            coin["rect"].move_ip(0, - size_coin)
+        # -----> Actualizar pantalla
+        pygame.display.flip()
 
-    for coin in coins[:]:
-        if coin["imagen"]:
-            VENTANA.blit(coin["imagen"], coin["rect"])
-        else:
-            # pygame.draw.rect()
-            # if detectar_colision_circ(coin["rect"], block["rect"]):
-            #     coins.remove(coin)
-            #     contador += 1
-            #     # texto = fuente.render(f"Coins : {contador}", True, magenta)
-            #     # rect_texto = texto.get_rect()
-            #     # rect_texto.midtop =
-
-            # VENTANA.blit(coin["imagen", coin ["rect"]])
-            pass
-
-    # -----> Dibujar pantalla
-
-    VENTANA.fill(black)
-    for coin in coins:
-        pygame.draw.rect(VENTANA, coin["color"],
-                         coin["rect"], coin["borde", coin["radio"]])
-
-    for block in bloques:
-        pygame.draw.rect(VENTANA, block["color"], block["rect"])
-
-    # -----> Actualizar pantalla
-    pygame.display.flip()
-
-pygame.quit()
+    pygame.quit()
