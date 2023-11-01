@@ -19,13 +19,13 @@ def game_loop():
     vidas_jugador = VIDAS_JUGADOR
     enemigos_eliminados = 0
 
-    # Inside the game loop
+    # Bucle interno
 
     while corriendo:
         # Añade este mensaje para verificar la ejecución del bucle
         print("Bucle del juego ejecutándose...")
-        clock.tick(60)
-        ventana.fill((0, 0, 0))
+        clock.tick(FPS)
+        ventana.fill(NEGRO)
 
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:

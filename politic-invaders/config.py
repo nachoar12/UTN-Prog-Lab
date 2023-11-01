@@ -7,8 +7,11 @@ ANCHO_VENTANA, ALTO_VENTANA = 1000, 800
 ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("Politic Invaders")
 
+# RELOJ - FPS
+FPS = 60
 
 # Colores
+NEGRO = (0, 0, 0)
 COLORES_ENEMIGOS = [
     (0, 156, 222),  # celeste
     (117, 59, 189),  # violeta
@@ -25,8 +28,8 @@ TAMAÑO_BLOQUE = 60
 FILA_ENEMIGOS = 5
 COLUMNA_ENEMIGOS = 10
 DISTANCIA_ENTRE_ENEMIGOS = 25
-ANCHO_PROYECTIL = 10
-ALTO_PROYECTIL = 30
+ANCHO_PROYECTIL = 30
+ALTO_PROYECTIL = 40
 
 # Crear jugador
 
@@ -51,13 +54,13 @@ MILEI = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/Javier_Milei-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
 
 BULRICH = pygame.transform.scale(pygame.image.load(
-    "/home/nacho/Desktop/github-utn-prog-lab/politic-invaders/images/Bullrich-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
+    "politic-invaders/images/Bullrich-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
 
 SCHIARETTI = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/juan_schiaretti-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
 
 BREGMAN = pygame.transform.scale(pygame.image.load(
-    "/home/nacho/Desktop/github-utn-prog-lab/politic-invaders/images/Myriam_Bregman-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
+    "politic-invaders/images/Myriam_Bregman-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
 
 # Crear enemigos según el color
 
@@ -136,7 +139,7 @@ def mover_enemigos(enemigos, sentido_movimiento):
 
 
 def crear_proyectil(x, y, color):
-    return {'x': x, 'y': y, 'color': color}
+    return {'x': x, 'y': y, 'color': color, 'mask': None}
 
 # Dibujar proyectil
 
@@ -167,9 +170,30 @@ def mover_proyectiles_jugador(proyectiles):
 # Función para dibujar proyectiles
 
 
+# Dibujar proyectiles
 def dibujar_proyectiles(proyectiles):
     for proyectil in proyectiles:
-        dibujar_proyectil(proyectil)
+        if proyectil['mask']:  # Verifica si hay una máscara asociada al proyectil
+            ventana.blit(proyectil['mask'], (proyectil['x'], proyectil['y']))
+        else:
+            # Si no hay máscara, dibuja el proyectil con el color
+            ancho_proyectil = ANCHO_PROYECTIL
+            alto_proyectil = ALTO_PROYECTIL
+            pygame.draw.rect(ventana, proyectil['color'], (
+                proyectil['x'] - ancho_proyectil // 2, proyectil['y'], ancho_proyectil, alto_proyectil))
+# Proyectiles enemigos
+
+
+CHORIPAN = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/choripan-removebg-preview.png"), (ANCHO_PROYECTIL, ALTO_PROYECTIL))
+DOLAR = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/dolar-removebg-preview.png"), (ANCHO_PROYECTIL, ALTO_PROYECTIL))
+VINO = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/vino-removebg-preview.png"), (ANCHO_PROYECTIL, ALTO_PROYECTIL))
+FERNET = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/fernet-removebg-preview.png"), (ANCHO_PROYECTIL, ALTO_PROYECTIL))
+BANDERIN = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/pañuelo-verde-removebg-preview.png"), (ANCHO_PROYECTIL, ALTO_PROYECTIL))
 
 # Crear función para disparo de enemigos de manera aleatoria
 
@@ -182,6 +206,16 @@ def disparar_enemigo(enemigo, proyectiles):
             5  # Ajustar la posición del proyectil
         y = enemigo['y'] + TAMAÑO_BLOQUE
         proyectil = crear_proyectil(x, y, enemigo['color'])
+        if enemigo["color"] == (0, 156, 222):  # celeste
+            proyectil['mask'] = CHORIPAN
+        elif enemigo["color"] == (117, 59, 189):  # violeta
+            proyectil['mask'] = DOLAR
+        elif enemigo["color"] == (254, 221, 0):  # amarillo
+            proyectil['mask'] = VINO
+        elif enemigo["color"] == (67, 72, 143):  # azul
+            proyectil['mask'] = FERNET
+        elif enemigo["color"] == (249, 84, 97):  # rojo
+            proyectil['mask'] = BANDERIN
         proyectiles.append(proyectil)
 
 # Función para que los enemigos disparen proyectiles hacia abajo
