@@ -14,6 +14,7 @@ reproduciendo_musica = True
 
 def bucle_juego():
     global reproduciendo_musica
+    pygame.mixer.music.play(1)
     jugador = crear_jugador()
     enemigos = crear_grilla_enemigos()
     proyectiles_jugador = []  # Lista para los proyectiles del jugador
@@ -25,7 +26,6 @@ def bucle_juego():
     vidas_jugador = VIDAS_JUGADOR
     enemigos_eliminados = 0
     # max_score = 0
-    pygame.mixer.music.play(1)
     # Bucle menu
     menu_principal()
     # Bucle interno

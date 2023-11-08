@@ -1,4 +1,10 @@
 1- pathing absoluto de sonidos,img
 2- scores (escritura, guardado y lectura)
 3- mascaras (uso de colisiones overlap())
-4- 
+4- agregar ventana de trucos al menu
+
+# modificiones profe
+- Guardo el maximo score y comparo
+- Elemento especial (powerup)
+- Docstrings funciones
+- Imagen en menu inicial

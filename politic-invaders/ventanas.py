@@ -155,7 +155,7 @@ def menu_principal():
                         cerrar_juego()
             if contador_de_clicks == 10:
                 print("Abriendo ventana de trucos...")
-                ventana_de_trucos()
+                # ventana_de_trucos()
 
             pygame.display.update()
 
@@ -185,7 +185,6 @@ def ventana_game_over():
         "Presione R para reiniciar", True, (BLANCO))
     with open("politic-invaders/scores.json", "r") as scores:
         score = json.load(scores)
-        print(scores)
         texto_max_score = fuente_game_over.render(
         f"Score: {score}", True, (NARANJA))
         ventana.blit(texto_max_score, (texto_pos_x, ALTO_VENTANA - 100))
