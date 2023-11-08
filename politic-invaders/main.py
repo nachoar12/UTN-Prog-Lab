@@ -2,6 +2,7 @@ import pygame
 from config import *
 from ventanas import *
 from funciones import *
+import json
 
 # Inicialización de Pygame
 pygame.init()
@@ -77,8 +78,7 @@ def bucle_juego():
                         pass
                     sonido_colision.play()
                     enemigos.remove(enemigo)
-                    enemigos_eliminados += 1
-
+                    enemigos_eliminados += 1                        
                 # sacar el proyectil una vez que sale de la pantalla
                 elif len(proyectiles_jugador) > 0 and proyectil_jugador["y"] + ALTO_VENTANA < ALTO_VENTANA - ALTO_PROYECTIL:
                     try:  # Error el proyectil no se encuentra en la lista
@@ -109,29 +109,43 @@ def bucle_juego():
         texto_pausa = fuente_juego.render("P = Pausa", True, (BLANCO))
         texto_mute = fuente_juego.render("M = Mute", True, (BLANCO))
 
+       
         # Game Over 0 vidas
         if vidas_jugador <= 0:
             corriendo = False
             # print("¡Has perdido! Se acabaron las vidas.")
             pygame.mixer.music.pause()
             sonido_game_over_perder.play()
+
+            # Guardo el score
+            # Agregar funcionalidad
+            score = enemigos_eliminados
+            with open("politic-invaders/scores.json", "w") as scores:
+                json.dump(score,scores)
             ventana_game_over()
-            print(f"Max Score: {enemigos_eliminados}")
+            print(f"Score: {enemigos_eliminados}")
             bucle_juego()
 
         # Game Over enemigos eliminados
         if enemigos_eliminados == FILA_ENEMIGOS * COLUMNA_ENEMIGOS:
+            corriendo = False
             pygame.mixer.music.pause()
             sonido_game_over_ganar.play()
+            score = enemigos_eliminados
+            with open("politic-invaders/scores.json", "w") as scores:
+                json.dump(score,scores)
             ventana_game_over()
             # Agregar enemigos por cada 50 eleminados
             # El jugador elimino a todos los enemigos
             print("¡Has ganado! Todos los enemigos han sido eliminados.")
-            print(f"Max Score: {enemigos_eliminados}")
+            print(f"Score: {enemigos_eliminados}")
             bucle_juego()
 
         # Comienzo a dibujar la pantalla
-        ventana.fill(NEGRO)
+        # ventana.fill(NEGRO)
+        # rectangulo para cargar fondo
+        fondo = pygame.Rect(0,0,ANCHO_VENTANA,ALTO_VENTANA)
+        ventana.blit(imagen_bkg,fondo)
 
         dibujar_jugador(jugador)
         dibujar_enemigos(enemigos)
@@ -146,8 +160,10 @@ def bucle_juego():
         ventana.blit(texto_mute, (ANCHO_VENTANA - 130, ALTO_VENTANA - 30))
 
         pygame.display.update()
+        
 
     cerrar_juego()
 
+   
 
 bucle_juego()

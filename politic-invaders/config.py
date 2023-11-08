@@ -1,5 +1,10 @@
 import pygame
 import random
+import os
+
+dir_actual = os.getcwd()
+dir_actual = os.path.abspath(dir_actual)
+print(dir_actual)
 
 pygame.mixer.init()
 
@@ -7,6 +12,7 @@ pygame.mixer.init()
 
 # Esta pensado para una resolucion de 1000x800 pero la res de la notebook no me da, hay desfazajes
 ANCHO_VENTANA, ALTO_VENTANA = 900, 700
+CENTRO_VENTANA = (ANCHO_VENTANA, ALTO_VENTANA)
 ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("Politic Invaders")
 
@@ -48,6 +54,10 @@ fuente_instrucciones = pygame.font.SysFont("Arial", 34) # tamaño orignal 40
 fuente_game_over = pygame.font.SysFont("Arial", 32) 
 
 # sonidos
+# dir_sonido_gamer_ganar = 
+
+# dir_sonidos = []
+
 try:
     pygame.mixer.music.load(
         "politic-invaders/sounds/bgm.mp3")
@@ -64,6 +74,9 @@ try:
 except pygame.error as error:
     print("Error al cargar los sonidos")
 
+# Cargo imagen de fondo
+imagen_bkg = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/espacio.jpg"), (ANCHO_VENTANA, ALTO_VENTANA))
 
 # Número de vidas del jugador
 VIDAS_JUGADOR = 3

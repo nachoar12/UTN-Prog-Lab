@@ -29,7 +29,10 @@ def esperar_usuario():
 
 
 def dibujar_bloque(block):
-    pygame.draw.rect(
+    if block['mask']:  # Si tiene mascara, dibuja la mascara
+        ventana.blit(block['mask'], (block['x'], block['y']))
+    else:
+        pygame.draw.rect(
         ventana, block['color'], (block['x'], block['y'], TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
 
 # Dibujar jugador
@@ -37,8 +40,7 @@ def dibujar_bloque(block):
 
 def dibujar_jugador(jugador):
     dibujar_bloque(jugador)
-    if jugador['mask']:  # Si tiene mascara, dibuja la mascara
-        ventana.blit(jugador['mask'], (jugador['x'], jugador['y']))
+
 
 
 # Dibujar enemigos

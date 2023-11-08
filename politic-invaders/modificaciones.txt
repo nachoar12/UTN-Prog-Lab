@@ -1,0 +1,4 @@
+1- pathing absoluto de sonidos,img
+2- scores (escritura, guardado y lectura)
+3- mascaras (uso de colisiones overlap())
+4- 
