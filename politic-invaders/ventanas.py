@@ -182,11 +182,11 @@ def ventana_game_over():
     texto_game_over = fuente_game_over.render("Game Over", True, (BLANCO))
     texto_reiniciar = fuente_game_over.render(
         "Presione R para reiniciar", True, (BLANCO))
-    texto_max_score = fuente_game_over.render(
-        f"Max Score: ", True, (NARANJA))
+    # texto_max_score = fuente_game_over.render(
+    #     f"Max Score: ", True, (NARANJA))
     ventana.blit(texto_game_over, (texto_pos_x, texto_pos_y - 150))
     ventana.blit(texto_reiniciar, (texto_pos_x - 75, texto_pos_y))
-    ventana.blit(texto_max_score, (texto_pos_x, ALTO_VENTANA - 100))
+    # ventana.blit(texto_max_score, (texto_pos_x, ALTO_VENTANA - 100))
     pygame.display.update()
     game_over = True
     while game_over:

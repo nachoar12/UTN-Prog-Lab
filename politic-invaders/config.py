@@ -5,7 +5,8 @@ pygame.mixer.init()
 
 # Dimensiones de la ventana del juego
 
-ANCHO_VENTANA, ALTO_VENTANA = 1000, 800
+# Esta pensado para una resolucion de 1000x800 pero la res de la notebook no me da, hay desfazajes
+ANCHO_VENTANA, ALTO_VENTANA = 900, 700
 ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("Politic Invaders")
 
@@ -34,7 +35,7 @@ COLOR_JUGADOR = (60, 179, 113)  # verde lima
 
 TAMAÑO_BLOQUE = 40
 FILA_ENEMIGOS = 5
-COLUMNA_ENEMIGOS = 12
+COLUMNA_ENEMIGOS = 10
 DISTANCIA_ENTRE_ENEMIGOS = 25
 ANCHO_PROYECTIL = 25
 ALTO_PROYECTIL = 30
@@ -43,8 +44,8 @@ ALTO_PROYECTIL = 30
 
 pygame.font.init()
 fuente_juego = pygame.font.SysFont("Arial", 28)
-fuente_instrucciones = pygame.font.SysFont("Arial", 40)
-fuente_game_over = pygame.font.SysFont("Arial", 32)
+fuente_instrucciones = pygame.font.SysFont("Arial", 34) # tamaño orignal 40
+fuente_game_over = pygame.font.SysFont("Arial", 32) 
 
 # sonidos
 try:
