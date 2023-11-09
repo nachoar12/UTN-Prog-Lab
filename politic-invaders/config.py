@@ -2,31 +2,33 @@ import pygame
 import random
 import os
 
+
+# Se importan las librerías necesarias para el juego.
+
+# Se obtiene y muestra la ruta actual del directorio.
 dir_actual = os.getcwd()
 dir_actual = os.path.abspath(dir_actual)
 print(dir_actual)
 
+# Se inicializa el módulo de mezcla de sonido de Pygame.
 pygame.mixer.init()
 
-# Dimensiones de la ventana del juego
-
-# Esta pensado para una resolucion de 1000x800 pero la res de la notebook no me da, hay desfazajes
-ANCHO_VENTANA, ALTO_VENTANA = 900, 700
+# Se establecen las dimensiones de la ventana del juego.
+ANCHO_VENTANA, ALTO_VENTANA = 900, 700  # tamaño original 1000 x 800
 CENTRO_VENTANA = (ANCHO_VENTANA, ALTO_VENTANA)
 ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("Politic Invaders")
 
-# RELOJ - FPS , velocidad
+# Se establecen los parámetros relacionados con el tiempo y la velocidad.
+FPS = 60  # Cuadros por segundo.
+velocidad_jugador = 5  # Velocidad del juego.
+velocidad_enemigos = 1
+probabilidad_disparo_enemigo = 1
 
-FPS = 60
-vel = 5
-
-# Colores
-
+# Se definen los colores utilizados en el juego.
 NEGRO = (0, 0, 0)
 BLANCO = (255, 255, 255)
 NARANJA = (255, 128, 0)
-
 COLORES_ENEMIGOS = [
     (0, 156, 222),  # celeste
     (117, 59, 189),  # violeta
@@ -34,11 +36,9 @@ COLORES_ENEMIGOS = [
     (67, 72, 143),  # azul
     (249, 84, 97)  # rojo
 ]
-
 COLOR_JUGADOR = (60, 179, 113)  # verde lima
 
-# Tamaño de los bloques
-
+# Se establecen las dimensiones de los bloques y proyectiles.
 TAMAÑO_BLOQUE = 40
 FILA_ENEMIGOS = 5
 COLUMNA_ENEMIGOS = 10
@@ -46,21 +46,32 @@ DISTANCIA_ENTRE_ENEMIGOS = 25
 ANCHO_PROYECTIL = 25
 ALTO_PROYECTIL = 30
 
-# Fuente
-
+# Se inicializan las fuentes utilizadas en el juego.
 pygame.font.init()
 fuente_juego = pygame.font.SysFont("Arial", 28)
-fuente_instrucciones = pygame.font.SysFont("Arial", 34) # tamaño orignal 40
-fuente_game_over = pygame.font.SysFont("Arial", 32) 
-
-# sonidos
-# dir_sonido_gamer_ganar = 
-
-# dir_sonidos = []
+fuente_instrucciones = pygame.font.SysFont("Arial", 34)  # tamaño original 40
+fuente_game_over = pygame.font.SysFont("Arial", 32)
 
 try:
-    pygame.mixer.music.load(
-        "politic-invaders/sounds/bgm.mp3")
+    # Se carga la imagen de fondo del juego y los menues
+    imagen_bkg = pygame.transform.scale(pygame.image.load(
+        "politic-invaders/images/espacio.jpg"), (ANCHO_VENTANA, ALTO_VENTANA))
+    menu_bkg = pygame.transform.scale(pygame.image.load(
+        "politic-invaders/images/argentina-8-bit.jpg"), (ANCHO_VENTANA, ALTO_VENTANA))
+    instrucciones_bkg = pygame.transform.scale(pygame.image.load(
+        "politic-invaders/images/planeta-tierra.png"), (ANCHO_VENTANA, ALTO_VENTANA))
+    game_over_bkg = pygame.transform.scale(pygame.image.load(
+        "politic-invaders/images/game-over.png"), (ANCHO_VENTANA, ALTO_VENTANA))
+    game_over_win_bkg = pygame.transform.scale(pygame.image.load(
+        "politic-invaders/images/game-over-win.png"), (ANCHO_VENTANA, ALTO_VENTANA))
+except ValueError as error:
+    print(error)
+
+
+# Se cargan y se inicializan los sonidos del juego.
+# En caso de error al cargar los sonidos, se imprime un mensaje.
+try:
+    pygame.mixer.music.load("politic-invaders/sounds/bgm.mp3")
     sonido_game_over_perder = pygame.mixer.Sound(
         "politic-invaders/sounds/game-over.mp3")
     sonido_game_over_ganar = pygame.mixer.Sound(
@@ -72,50 +83,35 @@ try:
     sonido_danio = pygame.mixer.Sound(
         "politic-invaders/sounds/classic_hurt.mp3")
 except pygame.error as error:
+    print(error)
     print("Error al cargar los sonidos")
 
-# Cargo imagen de fondo
-imagen_bkg = pygame.transform.scale(pygame.image.load(
-    "politic-invaders/images/espacio.jpg"), (ANCHO_VENTANA, ALTO_VENTANA))
 
-# Número de vidas del jugador
+# Se establece el número de vidas del jugador y los enemigos eliminados en 0.
 VIDAS_JUGADOR = 3
 enemigos_eliminados = 0
 
-# Crear jugador
-# Mascara jugador
+# Se intenta cargar el archivo de puntuación máxima (highscore.txt) y se verifica en caso que exista que no este vacío.
+# En caso que el archivo no contenga información, se asigna un max_score de 0.
+# En caso de error, se asigna un max_score de 0 y se muestra un mensaje de error.
+try:
+    with open("politic-invaders/highscore.txt", "r") as highscore_data:
+        if highscore_data.readline() != "" or None:
+            max_score = highscore_data.readline()
+        else:
+            max_score = 0
+except ValueError as error:
+    print(error)
+    max_score = 0
+
+# Se cargan y se establecen las máscaras de los jugadores y enemigos.
+# Aquí se realizan las transformaciones y se generan las máscaras a partir de las imágenes.
 
 CABILDO = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/cabildo.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
 JUGADOR = CABILDO
 rect_jugador = JUGADOR.get_rect()
 mascara_jugador = pygame.mask.from_surface(JUGADOR)
-
-
-def crear_jugador():
-    return {
-        'x': ANCHO_VENTANA // 2 - TAMAÑO_BLOQUE // 2,
-        'y': ALTO_VENTANA - TAMAÑO_BLOQUE * 1.5,
-        'color': COLOR_JUGADOR,
-        'mask': CABILDO
-    }
-
-
-# Crear enemigo
-
-def crear_enemigo(x, y, color):
-
-    return {'x': x, 'y': y, 'color': color, 'mask': None}
-# Enemigos
-
-# Mascaras enemigos
-
-# dir_massa_img =
-# dir_milei_img =
-# dir_bulrich_img =
-# dir_schiareti_img =
-# dir_bregman_img =
-
 
 MASSA = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/Sergio_Massa_2019-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
@@ -143,69 +139,16 @@ rect_bregman = BREGMAN.get_rect()
 mascara_bregman = pygame.mask.from_surface(BREGMAN)
 
 
-# Crear matriz de enemigos
-# Crear enemigos según el color
+# Enemigos y proyectiles - Máscaras
 
-
-def crear_grilla_enemigos():
-    enemigos = []
-    for fila in range(FILA_ENEMIGOS):
-        for col in range(COLUMNA_ENEMIGOS):
-            x = col * (TAMAÑO_BLOQUE + DISTANCIA_ENTRE_ENEMIGOS)
-            y = fila * (TAMAÑO_BLOQUE + DISTANCIA_ENTRE_ENEMIGOS)
-            # Asigna un color específico a cada fila
-            color = COLORES_ENEMIGOS[fila]
-            enemigo = crear_enemigo(x, y, color)
-            if enemigo["color"] == (0, 156, 222):  # celeste
-                enemigo['mask'] = MASSA
-            elif enemigo["color"] == (117, 59, 189):  # violeta
-                enemigo['mask'] = MILEI
-            elif enemigo["color"] == (254, 221, 0):  # amarillo
-                enemigo['mask'] = BULRICH
-            elif enemigo["color"] == (67, 72, 143):  # azul
-                enemigo['mask'] = SCHIARETTI
-            elif enemigo["color"] == (249, 84, 97):  # rojo
-                enemigo['mask'] = BREGMAN
-
-            enemigos.append(enemigo)
-    return enemigos
-
-# Crear proyectil
-
-
-def crear_proyectil(x, y, color):
-    return {'x': x, 'y': y, 'color': color, 'mask': None}
-
-# Dibujar proyectiles
-
-
-def dibujar_proyectiles(proyectiles):
-    for proyectil in proyectiles:
-        if proyectil['mask']:  # Verifica si hay una máscara asociada al proyectil
-            ventana.blit(proyectil['mask'], (proyectil['x'], proyectil['y']))
-        else:
-            # Si no hay máscara, dibuja el proyectil con el color
-            ancho_proyectil = ANCHO_PROYECTIL
-            alto_proyectil = ALTO_PROYECTIL
-            x_proyectil = proyectil['x'] - ancho_proyectil // 2
-            y_proyectil = proyectil['y']
-            pygame.draw.rect(ventana, proyectil['color'], (
-                x_proyectil, y_proyectil, ancho_proyectil, alto_proyectil))
-
-
-# Proyectiles jugador
-# Mascara proyectil jugador
-
-
+# Máscaras para los proyectiles del jugador
 ARGENTINA = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/argentina-removebg-preview.png"), (ANCHO_PROYECTIL, ALTO_PROYECTIL))
 proyectil_jugador = ARGENTINA
 rect_proyectil_jugador = ARGENTINA.get_rect()
-mascara_jugador = pygame.mask.from_surface(ARGENTINA)
+mascara_proyectil_jugador = pygame.mask.from_surface(ARGENTINA)
 
-# Proyectiles enemigos
-# Mascaras
-
+# Máscaras para los proyectiles de los enemigos
 CHORIPAN = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/choripan-removebg-preview.png"), (ANCHO_PROYECTIL, ALTO_PROYECTIL))
 rect_choripan = CHORIPAN.get_rect()
@@ -230,26 +173,3 @@ BANDERIN = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/pañuelo-verde-removebg-preview.png"), (ANCHO_PROYECTIL, ALTO_PROYECTIL))
 rect_banderin = BANDERIN.get_rect()
 mascara_banderin = pygame.mask.from_surface(BANDERIN)
-
-# Función para que los enemigos disparen de manera aleatoria
-
-
-def disparos_enemigos(enemigo, proyectiles):
-    # Número aleatorio para simular la probabilidad de disparo
-    probabilidad_disparo = random.randint(1, 2000)
-    if probabilidad_disparo <= 5:  # 5% de probabilidad de disparo
-        # Ajustar la posición del proyectil
-        x = enemigo['x'] + TAMAÑO_BLOQUE // 2
-        y = enemigo['y'] + TAMAÑO_BLOQUE
-        proyectil = crear_proyectil(x, y, enemigo['color'])
-        if enemigo["color"] == (0, 156, 222):  # celeste
-            proyectil['mask'] = CHORIPAN
-        elif enemigo["color"] == (117, 59, 189):  # violeta
-            proyectil['mask'] = DOLAR
-        elif enemigo["color"] == (254, 221, 0):  # amarillo
-            proyectil['mask'] = VINO
-        elif enemigo["color"] == (67, 72, 143):  # azul
-            proyectil['mask'] = FERNET
-        elif enemigo["color"] == (249, 84, 97):  # rojo
-            proyectil['mask'] = BANDERIN
-        proyectiles.append(proyectil)
