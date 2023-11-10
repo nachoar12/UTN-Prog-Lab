@@ -10,7 +10,7 @@ def cerrar_juego():
     """
     Cierra el juego y sale de la aplicación.
     """
-    print("Cerrando juego")
+    print("Cerrando juego...")
     pygame.quit()
     exit()
 
