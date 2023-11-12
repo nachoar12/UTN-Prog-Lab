@@ -128,7 +128,7 @@ def bucle_juego():
 
         # Cada 50 enemigos eliminados
         if enemigos_eliminados == FILA_ENEMIGOS * COLUMNA_ENEMIGOS:
-            enemigos_eliminados = 0  # Reseteo para volvera contar enemigos
+            enemigos_eliminados = 0  # Reseteo para volver a contar enemigos
             enemigos = crear_grilla_enemigos()  # Vuelvo a crear enemigos
             # Reseteo el movimiento para que vuelvan a la posicion inicial
             direccion_movimiento_enemigo = 1
