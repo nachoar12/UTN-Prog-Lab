@@ -34,6 +34,11 @@ def bucle_juego():
 
     score = 0
     enemigos_eliminados = 0
+    massa_eliminado = 0
+    milei_eliminado = 0
+    bulrich_eliminada = 0
+    schiaretti_eliminado = 0
+    bregman_eliminada = 0
 
     # Bucle interno
     while corriendo:
@@ -84,6 +89,27 @@ def bucle_juego():
                     if proyectil_jugador in proyectiles_jugador:  # Error el proyectil no se encuentra en la lista
                         proyectiles_jugador.remove(proyectil_jugador)
                     sonido_colision.play()
+                    if enemigo["mask"] == MASSA:
+                        massa_eliminado += 1
+                        if massa_eliminado == 10:
+                            sonido_massa.play()
+                    elif enemigo["mask"] == MILEI:
+                        milei_eliminado += 1
+                        if milei_eliminado == 10:
+                            sonido_milei.play()
+                    elif enemigo["mask"] == BULRICH:
+                        bulrich_eliminada += 1
+                        if bulrich_eliminada == 10:
+                            sonido_bulrich.play()
+                    elif enemigo["mask"] == SCHIARETTI:
+                        schiaretti_eliminado += 1
+                        if schiaretti_eliminado == 10:
+                            sonido_schiaretti.play()
+                    elif enemigo["mask"] == BREGMAN:
+                        bregman_eliminada += 1
+                        if bregman_eliminada == 10:
+                            sonido_bregman.play()
+
                     enemigos.remove(enemigo)
                     enemigos_eliminados += 1
                     score += 1
@@ -109,7 +135,7 @@ def bucle_juego():
             offset = (jugador['x'] - vida_extra['x'],
                       jugador['y'] - vida_extra['y'])
             if mascara_vida.overlap(mascara_jugador, offset) != None:
-                sonida_vida.play()
+                sonido_vida.play()
                 vidas_jugador += 1
                 vidas_extras.remove(vida)
         # Texto Score, vidas, pausa
@@ -140,6 +166,11 @@ def bucle_juego():
                 vida_extra = crear_vida_extra()
             vidas_extras.append(vida_extra)
             enemigos_eliminados = 0  # Reseteo para volver a contar enemigos
+            massa_eliminado = 0
+            milei_eliminado = 0
+            bulrich_eliminada = 0
+            schiaretti_eliminado = 0
+            bregman_eliminada = 0
             enemigos = crear_grilla_enemigos()  # Vuelvo a crear enemigos
             # Reseteo el movimiento para que vuelvan a la posicion inicial
             direccion_movimiento_enemigo = 1

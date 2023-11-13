@@ -107,11 +107,22 @@ try:
         "politic-invaders/sounds/laser-shoot.mp3")
     sonido_pausa = pygame.mixer.Sound("politic-invaders/sounds/pause.mp3")
     sonido_colision = pygame.mixer.Sound("politic-invaders/sounds/crash.mp3")
+    sonido_colision.set_volume(0.5)
     sonido_danio = pygame.mixer.Sound(
         "politic-invaders/sounds/classic_hurt.mp3")
-    sonida_vida = pygame.mixer.Sound(
+    sonido_vida = pygame.mixer.Sound(
         "politic-invaders/sounds/vida_extra.mp3")
-    sonida_vida.set_volume(0.5)
+    sonido_vida.set_volume(0.5)
+    sonido_massa = pygame.mixer.Sound(
+        "politic-invaders/sounds/no-me-quemes.mp3")
+    sonido_milei = pygame.mixer.Sound(
+        "politic-invaders/sounds/afuera-milei.mp3")
+    sonido_bulrich = pygame.mixer.Sound(
+        "politic-invaders/sounds/viejos-meados-pato-bullrich.mp3")
+    sonido_schiaretti = pygame.mixer.Sound(
+        "politic-invaders/sounds/schiaretti.mp3")
+    sonido_bregman = pygame.mixer.Sound(
+        "politic-invaders/sounds/gatito-mimoso-myriam-bregman.mp3")
 except ValueError as error:
     print("Error al cargar los sonidos: ")
     print(error)

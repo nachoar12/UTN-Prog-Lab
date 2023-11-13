@@ -1,11 +1,11 @@
 - pathing absoluto de sonidos,img
 - mascaras (uso de colisiones overlap()) x
 - agregar sonidos cuando elimino la fila de enemigos((sonidos de politicos))
-- agregar vida cada 150 enemigos eliminados
+- agregar vida cada 150 enemigos eliminados x
 
 
 # modificiones profe
-- Guardo el maximo score y comparo
+- Guardo el maximo score y comparo 
 - Elemento especial (powerup) x
 - Docstrings funciones x 
 - Imagen en menu inicial x
