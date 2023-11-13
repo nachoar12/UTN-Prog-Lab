@@ -6,6 +6,6 @@
 
 # modificiones profe
 - Guardo el maximo score y comparo
-- Elemento especial (powerup)
-- Docstrings funciones
+- Elemento especial (powerup) x
+- Docstrings funciones x 
 - Imagen en menu inicial x

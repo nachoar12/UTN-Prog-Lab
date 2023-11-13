@@ -17,6 +17,10 @@ def bucle_juego():
     pygame.mixer.music.play(-1)
     jugador = crear_jugador()
     enemigos = crear_grilla_enemigos()
+    vida_extra = crear_vida_extra()
+    if vida_extra["x"] == jugador["x"]:
+        vida_extra = crear_vida_extra()
+    vidas_extras = []
     proyectiles_jugador = []  # Lista para los proyectiles del jugador
     proyectiles_enemigos = []  # Lista para los proyectiles de los enemigos
     reloj = pygame.time.Clock()
@@ -101,10 +105,14 @@ def bucle_juego():
             elif proyectil_enemigo["y"] > ALTO_VENTANA:
                 proyectiles_enemigos.remove(proyectil_enemigo)
 
+        for vida in vidas_extras[:]:
+            offset = (jugador['x'] - vida_extra['x'],
+                      jugador['y'] - vida_extra['y'])
+            if mascara_vida.overlap(mascara_jugador, offset) != None:
+                sonida_vida.play()
+                vidas_jugador += 1
+                vidas_extras.remove(vida)
         # Texto Score, vidas, pausa
-
-        # print(proyectiles_jugador)
-        # print(proyectiles_enemigos)
 
         texto_vidas = fuente_juego.render(
             f"Vidas: {vidas_jugador}", True, (BLANCO))
@@ -128,16 +136,15 @@ def bucle_juego():
 
         # Cada 50 enemigos eliminados
         if enemigos_eliminados == FILA_ENEMIGOS * COLUMNA_ENEMIGOS:
+            if vida_extra["x"] == jugador["x"]:
+                vida_extra = crear_vida_extra()
+            vidas_extras.append(vida_extra)
             enemigos_eliminados = 0  # Reseteo para volver a contar enemigos
             enemigos = crear_grilla_enemigos()  # Vuelvo a crear enemigos
             # Reseteo el movimiento para que vuelvan a la posicion inicial
             direccion_movimiento_enemigo = 1
-            vel_enemigos += 1  # Aumento la velocidad de los enemigos
+            vel_enemigos += 0.5  # Aumento la velocidad de los enemigos
             prob_disparo_enemigo += 2  # Aumento la probabilidad de disparo
-
-        if score == 200:
-            # vida_extra()
-            ...
 
         if score == 500:
             corriendo = False
@@ -151,13 +158,11 @@ def bucle_juego():
 
         # Comienzo a dibujar la pantalla
 
-        if imagen_bkg:
-            # rectangulo para cargar fondo
-            fondo = pygame.Rect(0, 0, ANCHO_VENTANA, ALTO_VENTANA)
-            ventana.blit(imagen_bkg, fondo)
-        else:
-            ventana.fill(NEGRO)
-
+        # rectangulo para cargar fondo
+        fondo = pygame.Rect(0, 0, ANCHO_VENTANA, ALTO_VENTANA)
+        ventana.blit(imagen_bkg, fondo)
+        if vidas_extras:
+            dibujar_vidas(vidas_extras)
         dibujar_jugador(jugador)
         dibujar_enemigos(enemigos)
         # Dibujar proyectiles del jugador

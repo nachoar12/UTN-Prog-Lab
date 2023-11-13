@@ -1,5 +1,5 @@
 import pygame
-from config import ALTO_VENTANA, ANCHO_VENTANA, NEGRO, BLANCO, NARANJA, fuente_juego, FPS, fuente_game_over, fuente_instrucciones, sonido_pausa, menu_bkg, instrucciones_bkg, game_over_bkg, game_over_win_bkg
+from config import ALTO_VENTANA, ANCHO_VENTANA, NEGRO, BLANCO, NARANJA, ROJO, VERDE, AZUL, CELESTE, AMARILLO, fuente_juego, FPS, fuente_game_over, fuente_instrucciones, sonido_pausa, menu_bkg, instrucciones_bkg, game_over_bkg, game_over_win_bkg
 from funciones import cerrar_juego, esperar_usuario
 
 
@@ -9,13 +9,6 @@ pygame.init()
 # Inicio de la pantalla y configuración
 ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 pygame.display.set_caption("Politic Invaders - Pantalla de Inicio")
-
-# Definición de colores
-ROJO = (255, 0, 0)
-VERDE = (0, 255, 0)
-AZUL = (0, 0, 255)
-CELESTE = (125, 174, 217)
-AMARILLO = (236, 184, 64)
 
 # Tamaño y posición de botones
 ancho_boton = 250

@@ -1,18 +1,11 @@
 import pygame
+import random
 from config import *
 
 # Funciones
 
 # Función para cerrar el juego
 
-
-def cerrar_juego():
-    """
-    Cierra el juego y sale de la aplicación.
-    """
-    print("Cerrando juego...")
-    pygame.quit()
-    exit()
 
 # Función para esperar a que el usuario interactúe con el juego
 
@@ -64,6 +57,8 @@ def crear_enemigo(x, y, color):
     dict: Un diccionario que representa al enemigo.
     """
     return {'x': x, 'y': y, 'color': color, 'mask': None, 'mascara': None}
+
+
 # Función para dibujar un bloque en la pantalla
 
 
@@ -279,24 +274,6 @@ def mover_enemigos(enemigos, sentido_movimiento, velocidad_enemigos):
     return sentido_movimiento
 
 
-# Dibujar proyectiles
-
-# Función para dibujar un proyectil en la pantalla
-def dibujar_proyectil(proyectil):
-    """
-    Dibuja un proyectil en la ventana del juego.
-
-    Args:
-        proyectil (dict): Un diccionario que representa al proyectil.
-    """
-    # Cambiar el tamaño según sea necesario
-    ancho_proyectil = ANCHO_PROYECTIL
-    alto_proyectil = ALTO_PROYECTIL
-    x_proyectil = proyectil['x'] - ancho_proyectil // 2
-    y_proyectil = proyectil['y']
-    pygame.draw.rect(
-        ventana, proyectil['color'], (x_proyectil, y_proyectil, ancho_proyectil, alto_proyectil))
-
 # Función para que los enemigos disparen proyectiles
 
 
@@ -399,3 +376,48 @@ def obtener_highscore(score):
         int : El mismo puntaje que se ingresó, ya que devuelve el puntaje proporcionado.
     """
     return score
+
+# Función para agregar una vida
+
+
+def crear_vida_extra():
+    """
+    Crea una vida extra en la posición inicial, color y máscara específicos.
+
+    Returns:
+    dict: Un diccionario que representa a la vida.
+    """
+    return {
+        'x': random.randrange(ANCHO_VENTANA // 2 - TAMAÑO_BLOQUE // 2),
+        'y': ALTO_VENTANA - TAMAÑO_BLOQUE * 1.2,
+        'color': ROJO,
+        'mask': VIDA
+    }
+
+
+def dibujar_vidas(vidas_extras):
+    """
+    Dibuja las vidas extras en la ventana.
+
+    Args:
+    vidas_extras (list): Lista de diccionarios que representan las vidas con sus propiedades.
+    Cada diccionario contiene:
+    - 'mask' (surface): Superficie de la máscara asociada a la vida (opcional, puede ser None).
+    - 'x' (int): Posición en el eje x del proyectil.
+    - 'y' (int): Posición en el eje y del proyectil.
+    - 'color' (tuple): Tupla que representa el color del proyectil (utilizado si no hay máscara).
+    """
+
+    for vida in vidas_extras:
+        if vida['mask']:
+            # Verifica si hay una máscara asociada al proyectil y la dibuja en la posición x, y.
+            ventana.blit(vida['mask'], (vida['x'], vida['y']))
+        else:
+            # Si no hay máscara, dibuja un rectángulo con el color del proyectil en la posición x, y.
+            ancho_vida = TAMAÑO_BLOQUE // 1.5
+            alto_vida = TAMAÑO_BLOQUE // 1.5
+            # Centra el proyectil en el eje x
+            x_proyectil = vida['x'] - ancho_vida // 1.5
+            y_proyectil = vida['y']
+            pygame.draw.rect(ventana, vida['color'], (
+                x_proyectil, y_proyectil, ancho_vida, alto_vida))

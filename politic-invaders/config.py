@@ -1,9 +1,19 @@
 import pygame
-import random
 import os
 
-
 # Se importan las librerías necesarias para el juego.
+
+# Creo la funcion para cerrar el juego en caso de error.
+
+
+def cerrar_juego():
+    """
+    Cierra el juego y sale de la aplicación.
+    """
+    print("Cerrando juego...")
+    pygame.quit()
+    exit()
+
 
 # Se obtiene y muestra la ruta actual del directorio.
 dir_actual = os.getcwd()
@@ -29,6 +39,11 @@ probabilidad_disparo_enemigo = 1
 NEGRO = (0, 0, 0)
 BLANCO = (255, 255, 255)
 NARANJA = (255, 128, 0)
+ROJO = (255, 0, 0)
+VERDE = (0, 255, 0)
+AZUL = (0, 0, 255)
+CELESTE = (125, 174, 217)
+AMARILLO = (236, 184, 64)
 COLORES_ENEMIGOS = [
     (0, 156, 222),  # celeste
     (117, 59, 189),  # violeta
@@ -48,12 +63,16 @@ ALTO_PROYECTIL = 30
 
 # Se inicializan las fuentes utilizadas en el juego.
 pygame.font.init()
-fuente_juego = pygame.font.SysFont("Arial", 28)
+fuente_juego = pygame.font.SysFont("Arial", 26)
 fuente_instrucciones = pygame.font.SysFont("Arial", 34)  # tamaño original 40
 fuente_game_over = pygame.font.SysFont("Arial", 32)
 
+icono = pygame.Surface((20, 20))
+icono = icono.convert_alpha()
+icono.fill((NEGRO))
+
 try:
-    # Se carga la imagen de fondo del juego y los menues
+    # Se carga la imagen de fondo del juego, menues e icono
     imagen_bkg = pygame.transform.scale(pygame.image.load(
         "politic-invaders/images/espacio.jpg"), (ANCHO_VENTANA, ALTO_VENTANA))
     menu_bkg = pygame.transform.scale(pygame.image.load(
@@ -64,12 +83,20 @@ try:
         "politic-invaders/images/game-over.png"), (ANCHO_VENTANA, ALTO_VENTANA))
     game_over_win_bkg = pygame.transform.scale(pygame.image.load(
         "politic-invaders/images/game-over-win.png"), (ANCHO_VENTANA, ALTO_VENTANA))
+    icono = pygame.transform.scale(pygame.image.load(
+        "politic-invaders/images/icon.png"), (20, 20))
 except ValueError as error:
+    print("Error al cargar los sonidos: ")
     print(error)
+    cerrar_juego()
+
+
+pygame.display.set_icon(icono)
 
 
 # Se cargan y se inicializan los sonidos del juego.
 # En caso de error al cargar los sonidos, se imprime un mensaje.
+
 try:
     pygame.mixer.music.load("politic-invaders/sounds/bgm.mp3")
     sonido_game_over_perder = pygame.mixer.Sound(
@@ -82,9 +109,13 @@ try:
     sonido_colision = pygame.mixer.Sound("politic-invaders/sounds/crash.mp3")
     sonido_danio = pygame.mixer.Sound(
         "politic-invaders/sounds/classic_hurt.mp3")
-except pygame.error as error:
+    sonida_vida = pygame.mixer.Sound(
+        "politic-invaders/sounds/vida_extra.mp3")
+    sonida_vida.set_volume(0.5)
+except ValueError as error:
+    print("Error al cargar los sonidos: ")
     print(error)
-    print("Error al cargar los sonidos")
+    cerrar_juego()
 
 
 # Se establece el número de vidas del jugador y los enemigos eliminados en 0.
@@ -112,6 +143,11 @@ CABILDO = pygame.transform.scale(pygame.image.load(
 JUGADOR = CABILDO
 rect_jugador = JUGADOR.get_rect()
 mascara_jugador = pygame.mask.from_surface(JUGADOR)
+
+VIDA = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/vida.png"), (TAMAÑO_BLOQUE // 1.5, TAMAÑO_BLOQUE // 1.5))
+rect_vida = VIDA.get_rect()
+mascara_vida = pygame.mask.from_surface(VIDA)
 
 MASSA = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/Sergio_Massa_2019-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
