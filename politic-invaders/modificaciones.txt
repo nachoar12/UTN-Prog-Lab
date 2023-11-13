@@ -1,6 +1,6 @@
 - pathing absoluto de sonidos,img
 - mascaras (uso de colisiones overlap()) x
-- agregar sonidos cuando elimino la fila de enemigos((sonidos de politicos))
+- agregar sonidos cuando elimino la fila de enemigos((sonidos de politicos)) x
 - agregar vida cada 150 enemigos eliminados x
 
 
