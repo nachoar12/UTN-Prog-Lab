@@ -36,7 +36,7 @@ def crear_jugador():
     """
     return {
         'x': ANCHO_VENTANA // 2 - TAMAÑO_BLOQUE // 2,
-        'y': ALTO_VENTANA - TAMAÑO_BLOQUE * 1.5,
+        'y': ALTO_VENTANA - TAMAÑO_BLOQUE * 1.7,
         'color': COLOR_JUGADOR,
         'mask': CABILDO
     }
@@ -100,8 +100,6 @@ def dibujar_enemigos(enemigos):
     """
     for enemigo in enemigos:
         dibujar_bloque(enemigo)
-        if enemigo['mask']:  # Si tiene mascara, dibuja la mascara
-            ventana.blit(enemigo['mask'], (enemigo['x'], enemigo['y']))
 
 
 # Función para crear una matriz de enemigos y asignar máscaras según su color
@@ -395,7 +393,7 @@ def crear_vida_extra():
     }
 
 
-def dibujar_vidas(vidas_extras):
+def dibujar_power_up(power_ups):
     """
     Dibuja las vidas extras en la ventana.
 
@@ -408,16 +406,42 @@ def dibujar_vidas(vidas_extras):
     - 'color' (tuple): Tupla que representa el color del proyectil (utilizado si no hay máscara).
     """
 
-    for vida in vidas_extras:
-        if vida['mask']:
+    for power_up in power_ups:
+        if power_up['mask']:
             # Verifica si hay una máscara asociada al proyectil y la dibuja en la posición x, y.
-            ventana.blit(vida['mask'], (vida['x'], vida['y']))
+            ventana.blit(power_up['mask'], (power_up['x'], power_up['y']))
         else:
             # Si no hay máscara, dibuja un rectángulo con el color del proyectil en la posición x, y.
-            ancho_vida = TAMAÑO_BLOQUE // 1.5
-            alto_vida = TAMAÑO_BLOQUE // 1.5
+            ancho_power_up = TAMAÑO_BLOQUE // 1.5
+            alto_power_up = TAMAÑO_BLOQUE // 1.5
             # Centra el proyectil en el eje x
-            x_proyectil = vida['x'] - ancho_vida // 1.5
-            y_proyectil = vida['y']
-            pygame.draw.rect(ventana, vida['color'], (
-                x_proyectil, y_proyectil, ancho_vida, alto_vida))
+            x_power_up = power_up['x'] - ancho_power_up // 1.5
+            y_power_up = power_up['y']
+            pygame.draw.rect(ventana, power_up['color'], (
+                x_power_up, y_power_up, ancho_power_up, alto_power_up))
+
+
+def crear_motorosierra():
+    """
+    Crea a peron en la posición inicial, color y máscara específicos.
+
+    Returns:
+    dict: Un diccionario que representa al power up peron.
+    """
+    return {
+        'x': random.randrange(0, ANCHO_VENTANA - TAMAÑO_BLOQUE * 2),
+        'y': 0 - TAMAÑO_BLOQUE,
+        'color': BLANCO,
+        'mask': MOTOSIERRA
+    }
+
+
+def mover_power_up(power_up):
+    """
+    Mueve los el power up hacia abajo.
+
+    Args:
+        power_up (list): Una lista de diccionarios que representan a los power up, en este caso la motosierra.
+    """
+    for power in power_up:
+        power['y'] += 0.2  # Mover power_up hacia abajo

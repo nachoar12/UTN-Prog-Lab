@@ -11,9 +11,11 @@ reproduciendo_musica = True
 
 # Bucle del juego
 
+motosierra_on = False
+
 
 def bucle_juego():
-    global reproduciendo_musica
+    global reproduciendo_musica, motosierra_on
     pygame.mixer.music.play(-1)
     jugador = crear_jugador()
     enemigos = crear_grilla_enemigos()
@@ -21,6 +23,10 @@ def bucle_juego():
     if vida_extra["x"] == jugador["x"]:
         vida_extra = crear_vida_extra()
     vidas_extras = []
+    motosierra = crear_motorosierra()
+    poder = 0
+    power_up = []
+    proyectil_motosierra = []
     proyectiles_jugador = []  # Lista para los proyectiles del jugador
     proyectiles_enemigos = []  # Lista para los proyectiles de los enemigos
     reloj = pygame.time.Clock()
@@ -39,7 +45,7 @@ def bucle_juego():
     bulrich_eliminada = 0
     schiaretti_eliminado = 0
     bregman_eliminada = 0
-
+    velocidad_motosierra = 1
     # Bucle interno
     while corriendo:
         # print("Juego ejecutándose...")
@@ -75,6 +81,7 @@ def bucle_juego():
         enemigos_disparan(enemigos, proyectiles_enemigos, prob_disparo_enemigo)
         direccion_movimiento_enemigo = mover_enemigos(
             enemigos, direccion_movimiento_enemigo, vel_enemigos)
+        mover_power_up(power_up)
         # proyectil_jugador_disparados = 0
         # proyectil_enemigos_disparados = 0
 
@@ -114,7 +121,7 @@ def bucle_juego():
                     enemigos_eliminados += 1
                     score += 1
                 # sacar el proyectil una vez que sale de la pantalla
-                if proyectil_jugador in proyectiles_jugador and proyectil_jugador["y"] + ALTO_VENTANA < ALTO_VENTANA - ALTO_PROYECTIL:
+                elif proyectil_jugador in proyectiles_jugador and proyectil_jugador["y"] + ALTO_VENTANA < ALTO_VENTANA - ALTO_PROYECTIL:
                     proyectiles_jugador.remove(proyectil_jugador)
 
         # Proyectiles enemigos
@@ -131,14 +138,26 @@ def bucle_juego():
             elif proyectil_enemigo["y"] > ALTO_VENTANA:
                 proyectiles_enemigos.remove(proyectil_enemigo)
 
-        for vida in vidas_extras[:]:
-            offset = (jugador['x'] - vida_extra['x'],
-                      jugador['y'] - vida_extra['y'])
-            if mascara_vida.overlap(mascara_jugador, offset) != None:
-                sonido_vida.play()
-                vidas_jugador += 1
-                vidas_extras.remove(vida)
-        # Texto Score, vidas, pausa
+            for vida in vidas_extras[:]:
+                offset = (jugador['x'] - vida['x'],
+                          jugador['y'] - vida['y'])
+                if mascara_vida.overlap(mascara_jugador, offset) != None:
+                    sonido_vida.play()
+                    vidas_jugador += 1
+                    vidas_extras.remove(vida)
+
+            for power in power_up[:]:
+                offset = (jugador['x'] - power['x'],
+                          jugador['y'] - power['y'])
+                if mascara_motosierra.overlap(mascara_jugador, offset) != None:
+                    sonido_tiemblen.play()
+                    if not motosierra_on:  # Bandera para que solo me sume 1 valor en poder cuando agarra el power up motosierra
+                        poder += 1
+                        motosierra_on = True
+                    power_up.remove(power)
+                elif power["y"] > ALTO_VENTANA:
+                    power_up.remove(power)
+        # Texto Score, vidas, pausaa
 
         texto_vidas = fuente_juego.render(
             f"Vidas: {vidas_jugador}", True, (BLANCO))
@@ -146,6 +165,8 @@ def bucle_juego():
             f"Puntaje: {score}", True, (BLANCO))
         texto_pausa = fuente_juego.render("P = Pausa", True, (BLANCO))
         texto_mute = fuente_juego.render("M = Mute", True, (BLANCO))
+        texto_motosierra = fuente_juego.render(
+            f"F = Motosierra ({poder})", True, (BLANCO))
 
         # Game Over 0 vidas
         if vidas_jugador <= 0:
@@ -160,12 +181,13 @@ def bucle_juego():
             ventana_game_over(score)
             bucle_juego()
 
-        # Cada 50 enemigos eliminados
+        # Cada 50 enemigos eliminados vida extra
         if enemigos_eliminados == FILA_ENEMIGOS * COLUMNA_ENEMIGOS:
             if vida_extra["x"] == jugador["x"]:
                 vida_extra = crear_vida_extra()
             vidas_extras.append(vida_extra)
             enemigos_eliminados = 0  # Reseteo para volver a contar enemigos
+            # Reseteo para volver a reproducir sonidos
             massa_eliminado = 0
             milei_eliminado = 0
             bulrich_eliminada = 0
@@ -176,6 +198,9 @@ def bucle_juego():
             direccion_movimiento_enemigo = 1
             vel_enemigos += 0.5  # Aumento la velocidad de los enemigos
             prob_disparo_enemigo += 2  # Aumento la probabilidad de disparo
+
+        if score == 10:
+            power_up.append(motosierra)
 
         if score == 500:
             corriendo = False
@@ -193,7 +218,11 @@ def bucle_juego():
         fondo = pygame.Rect(0, 0, ANCHO_VENTANA, ALTO_VENTANA)
         ventana.blit(imagen_bkg, fondo)
         if vidas_extras:
-            dibujar_vidas(vidas_extras)
+            dibujar_power_up(vidas_extras)
+        if power_up or poder > 0:
+            dibujar_power_up(power_up)
+            ventana.blit(texto_motosierra, (ANCHO_VENTANA // 2 -
+                         TAMAÑO_BLOQUE, ALTO_VENTANA - 30))
         dibujar_jugador(jugador)
         dibujar_enemigos(enemigos)
         # Dibujar proyectiles del jugador
@@ -202,7 +231,7 @@ def bucle_juego():
         dibujar_proyectiles(proyectiles_enemigos)
         # Dibujar Score y vidas
         ventana.blit(texto_vidas, (10, 10))
-        ventana.blit(texto_puntaje, (ANCHO_VENTANA - 175, 10))
+        ventana.blit(texto_puntaje, (ANCHO_VENTANA - 140, 10))
         ventana.blit(texto_pausa, (10, ALTO_VENTANA - 30))
         ventana.blit(texto_mute, (ANCHO_VENTANA - 130, ALTO_VENTANA - 30))
 

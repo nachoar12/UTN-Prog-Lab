@@ -63,7 +63,7 @@ ALTO_PROYECTIL = 30
 
 # Se inicializan las fuentes utilizadas en el juego.
 pygame.font.init()
-fuente_juego = pygame.font.SysFont("Arial", 26)
+fuente_juego = pygame.font.SysFont("Arial", 22)
 fuente_instrucciones = pygame.font.SysFont("Arial", 34)  # tamaño original 40
 fuente_game_over = pygame.font.SysFont("Arial", 32)
 
@@ -99,20 +99,22 @@ pygame.display.set_icon(icono)
 
 try:
     pygame.mixer.music.load("politic-invaders/sounds/bgm.mp3")
+    pygame.mixer.music.set_volume(0.5)
     sonido_game_over_perder = pygame.mixer.Sound(
         "politic-invaders/sounds/game-over.mp3")
     sonido_game_over_ganar = pygame.mixer.Sound(
         "politic-invaders/sounds/success-trumpets.mp3")
     sonido_proyectiles = pygame.mixer.Sound(
         "politic-invaders/sounds/laser-shoot.mp3")
+    sonido_proyectiles.set_volume(0.4)
     sonido_pausa = pygame.mixer.Sound("politic-invaders/sounds/pause.mp3")
     sonido_colision = pygame.mixer.Sound("politic-invaders/sounds/crash.mp3")
-    sonido_colision.set_volume(0.5)
+    sonido_colision.set_volume(0.3)
     sonido_danio = pygame.mixer.Sound(
         "politic-invaders/sounds/classic_hurt.mp3")
     sonido_vida = pygame.mixer.Sound(
         "politic-invaders/sounds/vida_extra.mp3")
-    sonido_vida.set_volume(0.5)
+    sonido_vida.set_volume(0.4)
     sonido_massa = pygame.mixer.Sound(
         "politic-invaders/sounds/no-me-quemes.mp3")
     sonido_milei = pygame.mixer.Sound(
@@ -123,6 +125,12 @@ try:
         "politic-invaders/sounds/schiaretti.mp3")
     sonido_bregman = pygame.mixer.Sound(
         "politic-invaders/sounds/gatito-mimoso-myriam-bregman.mp3")
+    sonido_tiemblen = pygame.mixer.Sound(
+        "politic-invaders/sounds/tiemblen.mp3")
+    sonido_tiemblen.set_volume(0.3)
+    sonido_motosierra = pygame.mixer.Sound(
+        "politic-invaders/sounds/motosierra.mp3")
+    sonido_toasty = pygame.mixer.Sound("politic-invaders/sounds/toasty.mp3")
 except ValueError as error:
     print("Error al cargar los sonidos: ")
     print(error)
@@ -159,6 +167,16 @@ VIDA = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/vida.png"), (TAMAÑO_BLOQUE // 1.5, TAMAÑO_BLOQUE // 1.5))
 rect_vida = VIDA.get_rect()
 mascara_vida = pygame.mask.from_surface(VIDA)
+
+MOTOSIERRA = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/Milei-motosierra.png"), (TAMAÑO_BLOQUE * 2, TAMAÑO_BLOQUE * 1.5))
+rect_motosierra = MOTOSIERRA.get_rect()
+mascara_motosierra = pygame.mask.from_surface(MOTOSIERRA)
+
+MOTOSIERRA_POWER = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/Milei-motosierra.png"), (ANCHO_VENTANA // 2, ALTO_VENTANA - TAMAÑO_BLOQUE - 30))
+rect_motosierra_power = MOTOSIERRA_POWER.get_rect()
+mascara_motosierra_power = pygame.mask.from_surface(MOTOSIERRA_POWER)
 
 MASSA = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/Sergio_Massa_2019-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
