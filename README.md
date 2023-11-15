@@ -47,3 +47,5 @@
 # Windows, Linux, Mac :
 
 # $ pip install -r requirements.txt
+
+# JUEGO POLITIC INVADERS
