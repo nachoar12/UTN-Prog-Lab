@@ -15,19 +15,16 @@ def cerrar_juego():
     exit()
 
 
-# Se obtiene y muestra la ruta actual del directorio.
-dir_actual = os.getcwd()
-dir_actual = os.path.abspath(dir_actual)
-print(dir_actual)
-
 # Se inicializa el módulo de mezcla de sonido de Pygame.
 pygame.mixer.init()
+
+TITULO_JUEGO = "Politic invaders v1.0"
 
 # Se establecen las dimensiones de la ventana del juego.
 ANCHO_VENTANA, ALTO_VENTANA = 900, 700  # tamaño original 1000 x 800
 CENTRO_VENTANA = (ANCHO_VENTANA, ALTO_VENTANA)
 ventana = pygame.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
-pygame.display.set_caption("Politic Invaders")
+pygame.display.set_caption(TITULO_JUEGO)
 
 # Se establecen los parámetros relacionados con el tiempo y la velocidad.
 FPS = 60  # Cuadros por segundo.
@@ -72,20 +69,34 @@ icono = pygame.Surface((20, 20))
 icono = icono.convert_alpha()
 icono.fill((NEGRO))
 
+
+# Obtengo la ruta del directorio actual
+dir_actual = os.path.abspath(os.getcwd())
+
+# Defino la ruta base para la carpeta de imágenes
+ruta_imagenes = os.path.join(dir_actual, "politic-invaders", "images")
+
+# Defino las rutas completas a las imágenes uniendo la ruta base con el nombre de las imagenes
+ruta_espacio = os.path.join(ruta_imagenes, "espacio.jpg")
+ruta_argentina_8bit = os.path.join(ruta_imagenes, "argentina-8-bit.jpg")
+ruta_planeta_tierra = os.path.join(ruta_imagenes, "planeta-tierra.png")
+ruta_game_over = os.path.join(ruta_imagenes, "game-over.png")
+ruta_game_over_win = os.path.join(ruta_imagenes, "game-over-win.png")
+ruta_icono = os.path.join(ruta_imagenes, "icon.png")
+
+# Intento cargar las imágenes utilizando las rutas completas
 try:
-    # Se carga la imagen de fondo del juego, menues e icono
     imagen_bkg = pygame.transform.scale(pygame.image.load(
-        "politic-invaders/images/espacio.jpg"), (ANCHO_VENTANA, ALTO_VENTANA))
+        ruta_espacio), (ANCHO_VENTANA, ALTO_VENTANA))
     menu_bkg = pygame.transform.scale(pygame.image.load(
-        "politic-invaders/images/argentina-8-bit.jpg"), (ANCHO_VENTANA, ALTO_VENTANA))
+        ruta_argentina_8bit), (ANCHO_VENTANA, ALTO_VENTANA))
     instrucciones_bkg = pygame.transform.scale(pygame.image.load(
-        "politic-invaders/images/planeta-tierra.png"), (ANCHO_VENTANA, ALTO_VENTANA))
+        ruta_planeta_tierra), (ANCHO_VENTANA, ALTO_VENTANA))
     game_over_bkg = pygame.transform.scale(pygame.image.load(
-        "politic-invaders/images/game-over.png"), (ANCHO_VENTANA, ALTO_VENTANA))
+        ruta_game_over), (ANCHO_VENTANA, ALTO_VENTANA))
     game_over_win_bkg = pygame.transform.scale(pygame.image.load(
-        "politic-invaders/images/game-over-win.png"), (ANCHO_VENTANA, ALTO_VENTANA))
-    icono = pygame.transform.scale(pygame.image.load(
-        "politic-invaders/images/icon.png"), (20, 20))
+        ruta_game_over_win), (ANCHO_VENTANA, ALTO_VENTANA))
+    icono = pygame.transform.scale(pygame.image.load(ruta_icono), (20, 20))
 except FileNotFoundError as file_error:
     print("Archivo no encontrado: ", file_error)
     cerrar_juego()
@@ -103,40 +114,44 @@ pygame.display.set_icon(icono)
 # Se cargan y se inicializan los sonidos del juego.
 # En caso de error al cargar los sonidos, se imprime un mensaje y se cierra el juego.
 
+ruta_sonidos = os.path.join(dir_actual, "politic-invaders", "sounds")
+
 try:
-    pygame.mixer.music.load("politic-invaders/sounds/bgm.mp3")
+    pygame.mixer.music.load(os.path.join(ruta_sonidos, "bgm.mp3"))
     pygame.mixer.music.set_volume(0.5)
     sonido_game_over_perder = pygame.mixer.Sound(
-        "politic-invaders/sounds/game-over.mp3")
+        os.path.join(ruta_sonidos, "game-over.mp3"))
     sonido_game_over_ganar = pygame.mixer.Sound(
-        "politic-invaders/sounds/success-trumpets.mp3")
+        os.path.join(ruta_sonidos, "success-trumpets.mp3"))
     sonido_proyectiles = pygame.mixer.Sound(
-        "politic-invaders/sounds/laser-shoot.mp3")
+        os.path.join(ruta_sonidos, "laser-shoot.mp3"))
     sonido_proyectiles.set_volume(0.4)
-    sonido_pausa = pygame.mixer.Sound("politic-invaders/sounds/pause.mp3")
-    sonido_colision = pygame.mixer.Sound("politic-invaders/sounds/crash.mp3")
+    sonido_pausa = pygame.mixer.Sound(os.path.join(ruta_sonidos, "pause.mp3"))
+    sonido_colision = pygame.mixer.Sound(
+        os.path.join(ruta_sonidos, "crash.mp3"))
     sonido_colision.set_volume(0.3)
     sonido_danio = pygame.mixer.Sound(
-        "politic-invaders/sounds/classic_hurt.mp3")
+        os.path.join(ruta_sonidos, "classic_hurt.mp3"))
     sonido_vida = pygame.mixer.Sound(
-        "politic-invaders/sounds/vida_extra.mp3")
+        os.path.join(ruta_sonidos, "vida_extra.mp3"))
     sonido_vida.set_volume(0.4)
     sonido_massa = pygame.mixer.Sound(
-        "politic-invaders/sounds/no-me-quemes.mp3")
+        os.path.join(ruta_sonidos, "no-me-quemes.mp3"))
     sonido_milei = pygame.mixer.Sound(
-        "politic-invaders/sounds/afuera-milei.mp3")
-    sonido_bulrich = pygame.mixer.Sound(
-        "politic-invaders/sounds/viejos-meados-pato-bullrich.mp3")
+        os.path.join(ruta_sonidos, "afuera-milei.mp3"))
+    sonido_bulrich = pygame.mixer.Sound(os.path.join(
+        ruta_sonidos, "viejos-meados-pato-bullrich.mp3"))
     sonido_schiaretti = pygame.mixer.Sound(
-        "politic-invaders/sounds/schiaretti.mp3")
-    sonido_bregman = pygame.mixer.Sound(
-        "politic-invaders/sounds/gatito-mimoso-myriam-bregman.mp3")
+        os.path.join(ruta_sonidos, "schiaretti.mp3"))
+    sonido_bregman = pygame.mixer.Sound(os.path.join(
+        ruta_sonidos, "gatito-mimoso-myriam-bregman.mp3"))
     sonido_tiemblen = pygame.mixer.Sound(
-        "politic-invaders/sounds/tiemblen.mp3")
+        os.path.join(ruta_sonidos, "tiemblen.mp3"))
     sonido_tiemblen.set_volume(0.3)
     sonido_motosierra = pygame.mixer.Sound(
-        "politic-invaders/sounds/motosierra.mp3")
-    sonido_toasty = pygame.mixer.Sound("politic-invaders/sounds/toasty.mp3")
+        os.path.join(ruta_sonidos, "motosierra.mp3"))
+    sonido_toasty = pygame.mixer.Sound(
+        os.path.join(ruta_sonidos, "toasty.mp3"))
 except FileNotFoundError as file_error:
     print("Archivo no encontrado: ", file_error)
     cerrar_juego()

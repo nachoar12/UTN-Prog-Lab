@@ -208,14 +208,16 @@ def bucle_juego():
             corriendo = False
             # print("¡Has perdido! Se acabaron las vidas.")
             pygame.mixer.music.pause()
-            sonido_game_over_perder.play()
             # Guardo el maximo score
-            print(f"Score: {score}")
-            print(f"Highscore: {highscore}")
             if score > highscore:
                 highscore = score
-            guardar_score(highscore)
-            ventana_game_over(score)
+                guardar_score(highscore)
+                sonido_game_over_ganar.play()
+                ventana_win(score)
+            else:
+                sonido_game_over_perder.play()
+                ventana_game_over(score)
+            menu_principal()
             bucle_juego()
 
         # Cada 50 enemigos eliminados vida extra
@@ -236,22 +238,10 @@ def bucle_juego():
             vel_enemigos += 0.5  # Aumento la velocidad de los enemigos
             prob_disparo_enemigo += 2  # Aumento la probabilidad de disparo
 
-        if score > 0 and score % 150 == 0:
+        if score > 0 and score % 75 == 0:
             if not motosierra_on:  # Bandera para que solo me sume 1 power up
                 power_up.append(motosierra)
                 motosierra_on = True
-
-        if score == 500:
-            corriendo = False
-            pygame.mixer.music.pause()
-            sonido_game_over_ganar.play()
-            highscore = score
-            print("Has Ganado")
-            print(f"Highscore: {highscore}")
-            guardar_score(highscore)
-            ventana_win(highscore)
-            menu_principal()
-            bucle_juego()
 
         # Comienzo a dibujar la pantalla
 
