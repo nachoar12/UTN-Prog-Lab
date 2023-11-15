@@ -238,6 +238,7 @@ def bucle_juego():
             vel_enemigos += 0.5  # Aumento la velocidad de los enemigos
             prob_disparo_enemigo += 2  # Aumento la probabilidad de disparo
 
+        # Cada 75 enemigos eliminados power_up motosierra
         if score > 0 and score % 75 == 0:
             if not motosierra_on:  # Bandera para que solo me sume 1 power up
                 power_up.append(motosierra)
