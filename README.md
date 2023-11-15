@@ -48,4 +48,4 @@
 
 # $ pip install -r requirements.txt
 
-# JUEGO POLITIC INVADERS
+# JUEGO POLITIC INVADERS - [Ir al juego](https://github.com/nachoar12/utn-prog-lab/tree/main/politic-invaders)
