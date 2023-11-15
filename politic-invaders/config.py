@@ -101,7 +101,7 @@ pygame.display.set_icon(icono)
 
 
 # Se cargan y se inicializan los sonidos del juego.
-# En caso de error al cargar los sonidos, se imprime un mensaje.
+# En caso de error al cargar los sonidos, se imprime un mensaje y se cierra el juego.
 
 try:
     pygame.mixer.music.load("politic-invaders/sounds/bgm.mp3")
@@ -157,13 +157,21 @@ enemigos_eliminados = 0
 # En caso de error, se asigna un max_score de 0 y se muestra un mensaje de error.
 try:
     with open("politic-invaders/highscore.txt", "r") as highscore_data:
-        if highscore_data.readline() != "" or None:
-            max_score = highscore_data.readline()
-        else:
+        # Lee la primera línea y elimina espacios en blanco
+        max_score = highscore_data.readline().strip()
+        if not max_score:  # Verifica si max_score está vacío después de eliminar espacios en blanco
             max_score = 0
-except ValueError as error:
-    print(error)
-    max_score = 0
+        else:
+            max_score = int(max_score)  # Convierte a entero si no está vacío
+except FileNotFoundError as file_error:
+    print("Archivo no encontrado: ", file_error)
+    cerrar_juego()
+except ValueError as value_error:
+    print("Error de valor: ", value_error)
+    cerrar_juego()
+except IOError as io_error:
+    print("Error de E/S: ", io_error)
+    cerrar_juego()
 
 
 # MASCARAS

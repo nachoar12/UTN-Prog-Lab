@@ -1,6 +1,6 @@
 import pygame
-from config import ALTO_VENTANA, ANCHO_VENTANA, NEGRO, BLANCO, NARANJA, ROJO, VERDE, AZUL, CELESTE, AMARILLO, fuente_juego, FPS, fuente_game_over, fuente_instrucciones, sonido_pausa, menu_bkg, instrucciones_bkg, game_over_bkg, game_over_win_bkg
-from funciones import cerrar_juego, esperar_usuario
+from config import ALTO_VENTANA, ANCHO_VENTANA, NEGRO, BLANCO, NARANJA, ROJO, VERDE, AZUL, CELESTE, AMARILLO, fuente_juego, FPS, fuente_game_over, fuente_instrucciones, sonido_pausa, menu_bkg, instrucciones_bkg, game_over_bkg, game_over_win_bkg, max_score
+from funciones import cerrar_juego, esperar_usuario, cargar_score
 
 
 # Inicialización de Pygame
@@ -229,6 +229,8 @@ def ventana_game_over(score):
 
     Esta función muestra la pantalla de Game Over, que incluye el puntaje obtenido y un mensaje para reiniciar el juego al presionar la tecla 'R'. El puntaje se recupera desde un archivo txt. Espera a que el usuario presione 'R' para reiniciar el juego.
     """
+
+    highscore = cargar_score()
     fondo = pygame.Rect(0, 0, ANCHO_VENTANA, ALTO_VENTANA)
     ventana.blit(game_over_bkg, fondo)
     texto_reiniciar = fuente_game_over.render(
@@ -236,7 +238,7 @@ def ventana_game_over(score):
     texto_score = fuente_game_over.render(
         f"Score: {score}", True, (NARANJA))
     texto_highscore = fuente_game_over.render(
-        f"Highscore: {score}", True, (NARANJA))
+        f"Highscore: {highscore}", True, (NARANJA))
     ventana.blit(texto_reiniciar, (texto_pos_x - 75, ALTO_VENTANA - 50))
     ventana.blit(texto_score, (texto_pos_x - 250,  40))
     ventana.blit(texto_highscore, (texto_pos_x + 270,  40))
@@ -248,6 +250,8 @@ def ventana_game_over(score):
             if evento.type == pygame.QUIT:
                 game_over = False
             if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    cerrar_juego()
                 if evento.key == pygame.K_r:
                     game_over = False
                     return
@@ -262,6 +266,7 @@ def ventana_win(score):
 
     Esta función muestra la pantalla de Game Over, que incluye el puntaje obtenido y un mensaje para reiniciar el juego al presionar la tecla 'R'. El puntaje se recupera desde un archivo txt. Espera a que el usuario presione 'R' para reiniciar el juego.
     """
+    highscore = cargar_score()
     ventana.fill(BLANCO)
     fondo = pygame.Rect(0, 0, ANCHO_VENTANA, ALTO_VENTANA)
     ventana.blit(game_over_win_bkg, fondo)
@@ -270,7 +275,7 @@ def ventana_win(score):
     texto_score = fuente_game_over.render(
         f"Score: {score}", True, (NARANJA))
     texto_highscore = fuente_game_over.render(
-        f"Highscore: {score}", True, (NARANJA))
+        f"Highscore: {highscore}", True, (NARANJA))
     ventana.blit(texto_reiniciar, (texto_pos_x - 60, ALTO_VENTANA - 50))
     ventana.blit(texto_score, (texto_pos_x - 250,  40))
     ventana.blit(texto_highscore, (texto_pos_x + 270,  40))

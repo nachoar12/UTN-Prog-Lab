@@ -5,7 +5,7 @@
 
 
 # modificiones profe
-- Guardo el maximo score y comparo 
+- Guardo el maximo score y comparo x
 - Elemento especial (powerup) x
 - Docstrings funciones x 
 - Imagen en menu inicial x

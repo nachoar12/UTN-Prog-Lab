@@ -360,20 +360,33 @@ def mover_proyectiles_enemigos(proyectiles):
 
 
 # Score
-# Función para obtener el maximo score almacenado
-
-
-def obtener_highscore(score):
+def cargar_score():
     """
-    Obtiene el puntaje más alto (highscore) proporcionado.
+    Carga el puntaje máximo desde un archivo de texto.
 
-    Args:
-        score (int or float): El puntaje que se desea verificar.
+    Intenta leer el puntaje máximo desde el archivo 'highscore.txt' ubicado en el directorio 'politic-invaders'.
+    Si el archivo existe y contiene un puntaje válido, lo lee y lo devuelve como un número entero.
+    Si el archivo no existe o el puntaje no es válido, devuelve un puntaje máximo predeterminado de 0.
 
     Returns:
-        int : El mismo puntaje que se ingresó, ya que devuelve el puntaje proporcionado.
+    int: El puntaje máximo leído desde el archivo o 0 si no se pudo cargar correctamente.
     """
-    return score
+    try:
+        with open("politic-invaders/highscore.txt", "r") as highscore_data:
+            # Lee la primera línea y elimina espacios en blanco
+            max_score = highscore_data.readline().strip()
+            if not max_score:  # Verifica si max_score está vacío después de eliminar espacios en blanco
+                max_score = 0
+            else:
+                # Convierte a entero si no está vacío
+                max_score = int(max_score)
+    except FileNotFoundError:
+        max_score = 0  # Si el archivo no existe, asigna un valor predeterminado de 0
+    except (ValueError, TypeError) as error:
+        print("Error al cargar el puntaje máximo:", error)
+        max_score = 0  # Si hay un error al convertir a entero, asigna un valor predeterminado de 0
+
+    return max_score
 
 # Función para agregar una vida
 
@@ -433,10 +446,19 @@ mask_moto_power = MOTOSIERRA_POWER
 
 def crear_motorosierra(pos_x, pos_y, mask):
     """
-    Crea el power up motosierra en la posición inicial, color y máscara específicos.
+    Crea el power up de motosierra en una posición específica, con un color y máscara dados.
+
+    Args:
+    pos_x (int): Coordenada x inicial para la posición del power up.
+    pos_y (int): Coordenada y inicial para la posición del power up.
+    mask (objeto): La máscara específica para el power up de motosierra.
 
     Returns:
-    dict: Un diccionario que representa al power up motosierra.
+    dict: Un diccionario que representa al power up de motosierra con las siguientes propiedades:
+        - 'x': Coordenada x del power up.
+        - 'y': Coordenada y del power up.
+        - 'color': Color del power up.
+        - 'mask': Máscara utilizada para el power up de motosierra.
     """
     return {
         'x': pos_x,
@@ -472,6 +494,12 @@ def dibujar_motosierra(motosierra):
 
 
 def mover_motosierra(motosierras):
+    """
+    Mueve las motosierras disparadas por el jugador hacia la derecha.
+
+    Args:
+        motosierras (list): Una lista de diccionarios que representan al power up motosierra.
+    """
     for motosierra in motosierras:
         motosierra["x"] += 3
 
@@ -513,5 +541,18 @@ def mover_toasty(toasty, sentido_mov):
 
 # Funcion para guardar score
 
-def guardar_score():
-    ...
+def guardar_score(score):
+    """
+    Guarda el puntaje máximo en un archivo de texto.
+
+    Intenta guardar el puntaje máximo proporcionado en el archivo 'highscore.txt' ubicado en el directorio 'politic-invaders'.
+
+    Args:
+    score (int): El puntaje máximo que se desea guardar en el archivo.
+
+    """
+    try:
+        with open("politic-invaders/highscore.txt", "w") as highscore_data:
+            highscore_data.write(str(score))
+    except IOError as io_error:
+        print("Error al guardar el puntaje máximo:", io_error)

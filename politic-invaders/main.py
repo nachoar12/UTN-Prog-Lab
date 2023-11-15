@@ -13,6 +13,7 @@ pygame.init()
 
 
 def bucle_juego():
+    print("Inicia game loop")
     motosierra_on = False
     motosierra_cargada = False
     mover_sierra = False
@@ -41,7 +42,7 @@ def bucle_juego():
     vidas_jugador = VIDAS_JUGADOR
     vel_enemigos = velocidad_enemigos
     prob_disparo_enemigo = probabilidad_disparo_enemigo
-    highscore = obtener_highscore(max_score)
+    highscore = cargar_score()
     # print(highscore)
 
     score = 0
@@ -210,8 +211,10 @@ def bucle_juego():
             sonido_game_over_perder.play()
             # Guardo el maximo score
             print(f"Score: {score}")
+            print(f"Highscore: {highscore}")
             if score > highscore:
                 highscore = score
+            guardar_score(highscore)
             ventana_game_over(score)
             bucle_juego()
 
@@ -244,6 +247,8 @@ def bucle_juego():
             sonido_game_over_ganar.play()
             highscore = score
             print("Has Ganado")
+            print(f"Highscore: {highscore}")
+            guardar_score(highscore)
             ventana_win(highscore)
             menu_principal()
             bucle_juego()
