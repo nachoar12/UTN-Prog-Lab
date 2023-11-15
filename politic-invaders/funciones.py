@@ -38,7 +38,7 @@ def crear_jugador():
         'x': ANCHO_VENTANA // 2 - TAMAÑO_BLOQUE // 2,
         'y': ALTO_VENTANA - TAMAÑO_BLOQUE * 1.7,
         'color': COLOR_JUGADOR,
-        'mask': CABILDO
+        'mask': JUGADOR
     }
 
 
@@ -421,27 +421,97 @@ def dibujar_power_up(power_ups):
                 x_power_up, y_power_up, ancho_power_up, alto_power_up))
 
 
-def crear_motorosierra():
+# POSICION Y MASCARA MOTOSIERRA
+pos_moto_x = random.randrange(0, ANCHO_VENTANA - TAMAÑO_BLOQUE * 2)
+pos_moto_y = 0 - TAMAÑO_BLOQUE
+mask_moto = MOTOSIERRA
+# POSICION Y MASCARA MOTOSIERRA POWER
+pos_moto_power_x = 0 - ANCHO_VENTANA // 2
+pos_moto_power_y = 0
+mask_moto_power = MOTOSIERRA_POWER
+
+
+def crear_motorosierra(pos_x, pos_y, mask):
     """
-    Crea a peron en la posición inicial, color y máscara específicos.
+    Crea el power up motosierra en la posición inicial, color y máscara específicos.
 
     Returns:
-    dict: Un diccionario que representa al power up peron.
+    dict: Un diccionario que representa al power up motosierra.
     """
     return {
-        'x': random.randrange(0, ANCHO_VENTANA - TAMAÑO_BLOQUE * 2),
-        'y': 0 - TAMAÑO_BLOQUE,
+        'x': pos_x,
+        'y': pos_y,
         'color': BLANCO,
-        'mask': MOTOSIERRA
+        'mask': mask,
     }
 
 
 def mover_power_up(power_up):
     """
-    Mueve los el power up hacia abajo.
+    Mueve los / el power up hacia abajo.
 
     Args:
         power_up (list): Una lista de diccionarios que representan a los power up, en este caso la motosierra.
     """
     for power in power_up:
-        power['y'] += 0.2  # Mover power_up hacia abajo
+        power["y"] += 5  # Mover power_up hacia abajo
+
+
+def dibujar_motosierra(motosierra):
+    """
+    Dibuja un bloque en la ventana del juego. Puede usar una máscara si está definida en el bloque.
+
+    Args:
+    block (dict): Un diccionario que representa el bloque a dibujar.
+    """
+    if motosierra['mask']:  # Si tiene mascara, dibuja la mascara
+        ventana.blit(motosierra['mask'], (motosierra['x'], motosierra['y']))
+    else:
+        pygame.draw.rect(
+            ventana, motosierra['color'], (motosierra['x'], motosierra['y'], TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
+
+
+def mover_motosierra(motosierras):
+    for motosierra in motosierras:
+        motosierra["x"] += 3
+
+
+def crear_peron():
+    """
+    Crea a peron en la posición inicial, color y máscara específicos.
+
+    Returns:
+    dict: Un diccionario que representa a peron.
+    """
+    return {
+        'x': ANCHO_VENTANA - TAMAÑO_BLOQUE * 2.5,
+        'y': ALTO_VENTANA - TAMAÑO_BLOQUE * 2.5,
+        'color': ROJO,
+        'mask': PERON
+    }
+
+
+def mover_toasty(toasty, sentido_mov):
+    """
+    Mueve a los enemigos en la pantalla y cambia su dirección si alcanzan los bordes.
+
+    Args:
+        enemigos (list): Una lista de diccionarios que representan a los enemigos.
+        sentido_movimiento (int): El sentido del movimiento de los enemigos (1 o -1).
+
+    Returns:
+        int: El nuevo sentido del movimiento de los enemigos.
+    """
+
+    toasty['x'] += sentido_mov * 2.5  # velocidad de movimiento
+    # controla que llegue a los bordes
+    if toasty['x'] <= ANCHO_VENTANA - TAMAÑO_BLOQUE * 3:
+        sentido_mov *= -1  # Invertir el sentido para el siguiente movimiento en X
+
+    return sentido_mov
+
+
+# Funcion para guardar score
+
+def guardar_score():
+    ...

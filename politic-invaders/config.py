@@ -61,6 +61,7 @@ DISTANCIA_ENTRE_ENEMIGOS = 25
 ANCHO_PROYECTIL = 25
 ALTO_PROYECTIL = 30
 
+
 # Se inicializan las fuentes utilizadas en el juego.
 pygame.font.init()
 fuente_juego = pygame.font.SysFont("Arial", 22)
@@ -85,9 +86,14 @@ try:
         "politic-invaders/images/game-over-win.png"), (ANCHO_VENTANA, ALTO_VENTANA))
     icono = pygame.transform.scale(pygame.image.load(
         "politic-invaders/images/icon.png"), (20, 20))
-except ValueError as error:
-    print("Error al cargar los sonidos: ")
-    print(error)
+except FileNotFoundError as file_error:
+    print("Archivo no encontrado: ", file_error)
+    cerrar_juego()
+except pygame.error as pygame_error:
+    print("Error de pygame: ", pygame_error)
+    cerrar_juego()
+except Exception as error:
+    print("Error : ", error)
     cerrar_juego()
 
 
@@ -131,9 +137,14 @@ try:
     sonido_motosierra = pygame.mixer.Sound(
         "politic-invaders/sounds/motosierra.mp3")
     sonido_toasty = pygame.mixer.Sound("politic-invaders/sounds/toasty.mp3")
-except ValueError as error:
-    print("Error al cargar los sonidos: ")
-    print(error)
+except FileNotFoundError as file_error:
+    print("Archivo no encontrado: ", file_error)
+    cerrar_juego()
+except pygame.error as pygame_error:
+    print("Error de pygame: ", pygame_error)
+    cerrar_juego()
+except Exception as error:
+    print("Error : ", error)
     cerrar_juego()
 
 
@@ -154,14 +165,17 @@ except ValueError as error:
     print(error)
     max_score = 0
 
-# Se cargan y se establecen las máscaras de los jugadores y enemigos.
-# Aquí se realizan las transformaciones y se generan las máscaras a partir de las imágenes.
 
-CABILDO = pygame.transform.scale(pygame.image.load(
+# MASCARAS
+
+# JUGADOR
+
+JUGADOR = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/cabildo.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
-JUGADOR = CABILDO
 rect_jugador = JUGADOR.get_rect()
 mascara_jugador = pygame.mask.from_surface(JUGADOR)
+
+# POWER UPS
 
 VIDA = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/vida.png"), (TAMAÑO_BLOQUE // 1.5, TAMAÑO_BLOQUE // 1.5))
@@ -174,9 +188,16 @@ rect_motosierra = MOTOSIERRA.get_rect()
 mascara_motosierra = pygame.mask.from_surface(MOTOSIERRA)
 
 MOTOSIERRA_POWER = pygame.transform.scale(pygame.image.load(
-    "politic-invaders/images/Milei-motosierra.png"), (ANCHO_VENTANA // 2, ALTO_VENTANA - TAMAÑO_BLOQUE - 30))
+    "politic-invaders/images/Milei-motosierra.png"), (ANCHO_VENTANA // 2, ALTO_VENTANA - TAMAÑO_BLOQUE - 35))
 rect_motosierra_power = MOTOSIERRA_POWER.get_rect()
 mascara_motosierra_power = pygame.mask.from_surface(MOTOSIERRA_POWER)
+
+PERON = pygame.transform.scale(pygame.image.load(
+    "politic-invaders/images/peron-2.png"), (TAMAÑO_BLOQUE * 2.5, TAMAÑO_BLOQUE * 2.5))
+rect_peron = PERON.get_rect()
+mascara_peron = pygame.mask.from_surface(PERON)
+
+# ENEMIGOS
 
 MASSA = pygame.transform.scale(pygame.image.load(
     "politic-invaders/images/Sergio_Massa_2019-removebg-preview.png"), (TAMAÑO_BLOQUE, TAMAÑO_BLOQUE))
@@ -204,7 +225,7 @@ rect_bregman = BREGMAN.get_rect()
 mascara_bregman = pygame.mask.from_surface(BREGMAN)
 
 
-# Enemigos y proyectiles - Máscaras
+# PROYECTILES
 
 # Máscaras para los proyectiles del jugador
 ARGENTINA = pygame.transform.scale(pygame.image.load(

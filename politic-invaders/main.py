@@ -7,15 +7,17 @@ from funciones import *
 # Inicialización de Pygame
 pygame.init()
 # Inicializacion de la musica de fondo
-reproduciendo_musica = True
+
 
 # Bucle del juego
 
-motosierra_on = False
-
 
 def bucle_juego():
-    global reproduciendo_musica, motosierra_on
+    motosierra_on = False
+    motosierra_cargada = False
+    mover_sierra = False
+    toasty = False
+    reproduciendo_musica = True
     pygame.mixer.music.play(-1)
     jugador = crear_jugador()
     enemigos = crear_grilla_enemigos()
@@ -23,7 +25,10 @@ def bucle_juego():
     if vida_extra["x"] == jugador["x"]:
         vida_extra = crear_vida_extra()
     vidas_extras = []
-    motosierra = crear_motorosierra()
+    motosierra = crear_motorosierra(pos_moto_x, pos_moto_y, mask_moto)
+    motosierra_power = crear_motorosierra(
+        pos_moto_power_x, pos_moto_power_y, mask_moto_power)
+    peron = crear_peron()
     poder = 0
     power_up = []
     proyectil_motosierra = []
@@ -32,6 +37,7 @@ def bucle_juego():
     reloj = pygame.time.Clock()
     corriendo = True
     direccion_movimiento_enemigo = 1  # Dirección de movimiento inicial - derecha
+    dir_mov_toasty = -1
     vidas_jugador = VIDAS_JUGADOR
     vel_enemigos = velocidad_enemigos
     prob_disparo_enemigo = probabilidad_disparo_enemigo
@@ -45,7 +51,6 @@ def bucle_juego():
     bulrich_eliminada = 0
     schiaretti_eliminado = 0
     bregman_eliminada = 0
-    velocidad_motosierra = 1
     # Bucle interno
     while corriendo:
         # print("Juego ejecutándose...")
@@ -58,6 +63,11 @@ def bucle_juego():
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_p:
                 sonido_pausa.play()
                 pausar_juego()
+            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_f:
+                if proyectil_motosierra:
+                    mover_sierra = True
+                    poder -= 1
+                    sonido_motosierra.play()
             if evento.type == pygame.KEYDOWN and evento.key == pygame.K_m:
                 if reproduciendo_musica:
                     pygame.mixer.music.pause()
@@ -82,6 +92,10 @@ def bucle_juego():
         direccion_movimiento_enemigo = mover_enemigos(
             enemigos, direccion_movimiento_enemigo, vel_enemigos)
         mover_power_up(power_up)
+        if mover_sierra:
+            mover_motosierra(proyectil_motosierra)
+        if toasty:
+            dir_mov_toasty = mover_toasty(peron, dir_mov_toasty)
         # proyectil_jugador_disparados = 0
         # proyectil_enemigos_disparados = 0
 
@@ -92,6 +106,7 @@ def bucle_juego():
             for enemigo in enemigos[:]:
                 offset = (enemigo['x'] - proyectil_jugador['x'],
                           enemigo['y'] - proyectil_jugador['y'])
+                # Colisión proyecil con enemigo
                 if mascara_proyectil_jugador.overlap(enemigo['mascara'], offset) != None:
                     if proyectil_jugador in proyectiles_jugador:  # Error el proyectil no se encuentra en la lista
                         proyectiles_jugador.remove(proyectil_jugador)
@@ -130,6 +145,7 @@ def bucle_juego():
             # proyectil_enemigos_disparados += 1
             offset = (jugador['x'] - proyectil_enemigo['x'],
                       jugador['y'] - proyectil_enemigo['y'])
+            # Colision proyectil enemigo con jugador
             if proyectil_enemigo['mascara'].overlap(mascara_jugador, offset) != None:
                 proyectiles_enemigos.remove(proyectil_enemigo)
                 sonido_danio.play()
@@ -151,12 +167,30 @@ def bucle_juego():
                           jugador['y'] - power['y'])
                 if mascara_motosierra.overlap(mascara_jugador, offset) != None:
                     sonido_tiemblen.play()
-                    if not motosierra_on:  # Bandera para que solo me sume 1 valor en poder cuando agarra el power up motosierra
-                        poder += 1
-                        motosierra_on = True
+                    proyectil_motosierra.append(motosierra_power)
+                    if not motosierra_cargada:  # Bandera para que solo me sume 1 valor en poder cuando agarra el power up motosierra
+                        poder = poder + 1
+                        motosierra_cargada = True
                     power_up.remove(power)
                 elif power["y"] > ALTO_VENTANA:
                     power_up.remove(power)
+
+            for enemigo in enemigos[:]:
+                for motosierra in proyectil_motosierra[:]:
+                    offset = (enemigo['x'] - motosierra['x'],
+                              enemigo['y'] - motosierra['y'])
+                    if mascara_motosierra_power.overlap(enemigo['mascara'], offset) != None:
+                        sonido_colision.play()
+                        enemigos.remove(enemigo)
+                        enemigos_eliminados += 1
+                        score += 1
+                    # sacar el proyectil una vez que sale de la pantalla
+                    if motosierra in proyectil_motosierra and motosierra["x"] > ANCHO_VENTANA:
+                        toasty = True
+                        mover_sierra = False
+                        proyectil_motosierra.remove(motosierra)
+                        sonido_toasty.play()
+
         # Texto Score, vidas, pausaa
 
         texto_vidas = fuente_juego.render(
@@ -199,8 +233,10 @@ def bucle_juego():
             vel_enemigos += 0.5  # Aumento la velocidad de los enemigos
             prob_disparo_enemigo += 2  # Aumento la probabilidad de disparo
 
-        if score == 10:
-            power_up.append(motosierra)
+        if score > 0 and score % 150 == 0:
+            if not motosierra_on:  # Bandera para que solo me sume 1 power up
+                power_up.append(motosierra)
+                motosierra_on = True
 
         if score == 500:
             corriendo = False
@@ -223,6 +259,10 @@ def bucle_juego():
             dibujar_power_up(power_up)
             ventana.blit(texto_motosierra, (ANCHO_VENTANA // 2 -
                          TAMAÑO_BLOQUE, ALTO_VENTANA - 30))
+        if proyectil_motosierra:
+            dibujar_motosierra(motosierra_power)
+        if toasty:
+            dibujar_bloque(peron)
         dibujar_jugador(jugador)
         dibujar_enemigos(enemigos)
         # Dibujar proyectiles del jugador
