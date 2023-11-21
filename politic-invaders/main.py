@@ -287,13 +287,14 @@ def bucle_juego():
         ventana.blit(texto_puntaje, (ANCHO_VENTANA - 140, 10))
         ventana.blit(texto_pausa, (10, ALTO_VENTANA - 30))
         ventana.blit(texto_mute, (ANCHO_VENTANA - 130, ALTO_VENTANA - 30))
-
-        print("Motosierra Cargada: ", motosierra_cargada)
-        print("Proyectiles motosierra: ", proyectil_motosierra)
-        print("Motosierra On: ", motosierra_on)
-        print("Motosierra: ", motosierra)
-        print("Power UP: ", power_up)
-        print("Mover Sierra: ", mover_sierra)
+        
+        # Prints para debuguear
+        # print("Motosierra Cargada: ", motosierra_cargada)
+        # print("Proyectiles motosierra: ", proyectil_motosierra)
+        # print("Motosierra On: ", motosierra_on)
+        # print("Motosierra: ", motosierra)
+        # print("Power UP: ", power_up)
+        # print("Mover Sierra: ", mover_sierra)
         
 
         pygame.display.update()
