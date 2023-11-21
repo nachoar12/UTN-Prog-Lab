@@ -444,7 +444,7 @@ pos_moto_power_y = 0
 mask_moto_power = MOTOSIERRA_POWER
 
 
-def crear_motorosierra(pos_x, pos_y, mask):
+def crear_motosierra(pos_x, pos_y, mask):
     """
     Crea el power up de motosierra en una posición específica, con un color y máscara dados.
 
@@ -501,7 +501,7 @@ def mover_motosierra(motosierras):
         motosierras (list): Una lista de diccionarios que representan al power up motosierra.
     """
     for motosierra in motosierras:
-        motosierra["x"] += 3
+        motosierra["x"] += 3.5
 
 
 def crear_peron():
@@ -512,7 +512,7 @@ def crear_peron():
     dict: Un diccionario que representa a peron.
     """
     return {
-        'x': ANCHO_VENTANA - TAMAÑO_BLOQUE * 2.5,
+        'x': ANCHO_VENTANA + TAMAÑO_BLOQUE * 2.5,
         'y': ALTO_VENTANA - TAMAÑO_BLOQUE * 2.5,
         'color': ROJO,
         'mask': PERON
@@ -531,7 +531,7 @@ def mover_toasty(toasty, sentido_mov):
         int: El nuevo sentido del movimiento de los enemigos.
     """
 
-    toasty['x'] += sentido_mov * 2.5  # velocidad de movimiento
+    toasty['x'] += sentido_mov * 6  # velocidad de movimiento
     # controla que llegue a los bordes
     if toasty['x'] <= ANCHO_VENTANA - TAMAÑO_BLOQUE * 3:
         sentido_mov *= -1  # Invertir el sentido para el siguiente movimiento en X
