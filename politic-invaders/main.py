@@ -26,6 +26,7 @@ def bucle_juego():
     if vida_extra["x"] == jugador["x"]:
         vida_extra = crear_vida_extra()
     vidas_extras = []
+    pos_moto_x = random.randrange(0, ANCHO_VENTANA - TAMAÑO_BLOQUE * 2)
     motosierra = crear_motosierra(pos_moto_x, pos_moto_y, mask_moto)
     motosierra_power = crear_motosierra(
         pos_moto_power_x, pos_moto_power_y, mask_moto_power)
@@ -177,11 +178,15 @@ def bucle_juego():
                     poder = poder + 1
                     motosierra_cargada = True
                 power_up.remove(power)
+                pos_moto_x = random.randrange(
+                    0, ANCHO_VENTANA - TAMAÑO_BLOQUE * 2)
                 motosierra = crear_motosierra(
                     pos_moto_x, pos_moto_y, mask_moto)
             elif power["y"] > ALTO_VENTANA:
                 power_up.remove(power)
                 motosierra_on = False
+                pos_moto_x = random.randrange(
+                    0, ANCHO_VENTANA - TAMAÑO_BLOQUE * 2)
                 motosierra = crear_motosierra(
                     pos_moto_x, pos_moto_y, mask_moto)
 
