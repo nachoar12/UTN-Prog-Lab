@@ -169,7 +169,7 @@ def bucle_juego():
 
         for power in power_up[:]:
             offset = (jugador['x'] - power['x'],
-                        jugador['y'] - power['y'])
+                      jugador['y'] - power['y'])
             if mascara_motosierra.overlap(mascara_jugador, offset) != None:
                 sonido_tiemblen.play()
                 proyectil_motosierra.append(motosierra_power)
@@ -177,16 +177,18 @@ def bucle_juego():
                     poder = poder + 1
                     motosierra_cargada = True
                 power_up.remove(power)
-                motosierra = crear_motosierra(pos_moto_x, pos_moto_y, mask_moto)
+                motosierra = crear_motosierra(
+                    pos_moto_x, pos_moto_y, mask_moto)
             elif power["y"] > ALTO_VENTANA:
                 power_up.remove(power)
                 motosierra_on = False
-                motosierra = crear_motosierra(pos_moto_x, pos_moto_y, mask_moto)
-           
+                motosierra = crear_motosierra(
+                    pos_moto_x, pos_moto_y, mask_moto)
+
         for enemigo in enemigos[:]:
             for motosierra in proyectil_motosierra[:]:
                 offset = (enemigo['x'] - motosierra['x'],
-                            enemigo['y'] - motosierra['y'])
+                          enemigo['y'] - motosierra['y'])
                 if mascara_motosierra_power.overlap(enemigo['mascara'], offset) != None:
                     sonido_colision.play()
                     enemigos.remove(enemigo)
@@ -198,11 +200,30 @@ def bucle_juego():
                     mover_sierra = False
                     proyectil_motosierra.remove(motosierra)
                     sonido_toasty.play()
-                    motosierra_power =  motosierra_power = crear_motosierra(pos_moto_power_x, pos_moto_power_y, mask_moto_power)
+                    motosierra_power = motosierra_power = crear_motosierra(
+                        pos_moto_power_x, pos_moto_power_y, mask_moto_power)
                     motosierra_on = False
-                    motosierra = crear_motosierra(pos_moto_x, pos_moto_y, mask_moto)
-                    
-                
+                    motosierra = crear_motosierra(
+                        pos_moto_x, pos_moto_y, mask_moto)
+
+            offset_enem_jug = (jugador['x'] - enemigo['x'],
+                               jugador['y'] - enemigo['y'])
+            if enemigo["mascara"].overlap(mascara_jugador, offset_enem_jug) or enemigo["y"] > ALTO_VENTANA:
+                corriendo = False
+                # print("¡Has perdido! Se acabaron las vidas.")
+                pygame.mixer.music.pause()
+                # Guardo el maximo score
+                if score > highscore:
+                    highscore = score
+                    guardar_score(highscore)
+                    sonido_game_over_ganar.play()
+                    ventana_win(score)
+                else:
+                    sonido_game_over_perder.play()
+                    ventana_game_over(score)
+                menu_principal()
+                bucle_juego()
+
         if peron["x"] > ANCHO_VENTANA + TAMAÑO_BLOQUE * 3:
             toasty = False
             dir_mov_toasty = -1
@@ -252,7 +273,7 @@ def bucle_juego():
             # Reseteo el movimiento para que vuelvan a la posicion inicial
             direccion_movimiento_enemigo = 1
             vel_enemigos += 0.5  # Aumento la velocidad de los enemigos
-            prob_disparo_enemigo += 2  # Aumento la probabilidad de disparo
+            prob_disparo_enemigo += 1.5  # Aumento la probabilidad de disparo
 
         # Cada 75 enemigos eliminados se carga el power_up motosierra
 
@@ -287,7 +308,7 @@ def bucle_juego():
         ventana.blit(texto_puntaje, (ANCHO_VENTANA - 140, 10))
         ventana.blit(texto_pausa, (10, ALTO_VENTANA - 30))
         ventana.blit(texto_mute, (ANCHO_VENTANA - 130, ALTO_VENTANA - 30))
-        
+
         # Prints para debuguear
         # print("Motosierra Cargada: ", motosierra_cargada)
         # print("Proyectiles motosierra: ", proyectil_motosierra)
@@ -295,7 +316,6 @@ def bucle_juego():
         # print("Motosierra: ", motosierra)
         # print("Power UP: ", power_up)
         # print("Mover Sierra: ", mover_sierra)
-        
 
         pygame.display.update()
 
