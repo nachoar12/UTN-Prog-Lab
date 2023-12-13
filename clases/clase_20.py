@@ -51,4 +51,4 @@ def dividir(a, b):
 calcular(5, 2, multiplicar)
 calcular(18, 3, dividir)
 
-# una funcion se comporta como como cualquier otra variable. "Ciudadno de primera clase"
+# una funcion se comporta como como cualquier otra variable. "Ciudadano de primera clase"

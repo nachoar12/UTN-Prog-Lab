@@ -153,8 +153,7 @@ def menu_principal():
     contador_de_clicks = 0
 
     while corriendo:
-        fondo = pygame.Rect(0, 0, ANCHO_VENTANA, ALTO_VENTANA)
-        ventana.blit(menu_bkg, fondo)
+        ventana.blit(menu_bkg, (0, 0))
         reloj.tick(FPS)
         # Dibujo título principal
         texto_titulo = "*POLITIC INVADERS*"

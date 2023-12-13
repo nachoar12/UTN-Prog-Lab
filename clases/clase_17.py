@@ -1,5 +1,7 @@
 from data import data_personas
+from data.mock_data import empleados
 import os
+import json
 
 # import json
 
@@ -163,3 +165,63 @@ filtrar_lista(lista_de_personas)
 path, nombre_archivo = os.path.split(__file__)
 
 print(path)
+
+# path absoluto
+
+directorio = os.getcwd()
+path_completo = os.path.join(directorio, "mock_data.json")
+
+print(path_completo)
+
+with open(path_completo, "w") as file:
+    json.dump(empleados, file, indent=4)
+
+with open(path_completo, "r") as file:
+    data = json.load(file)
+
+print((data))
+
+# Archivos CSV
+
+with open(path, "r") as file:
+    header = file.readline()
+    data = file.readlines()
+
+header = header.strip().split(",")
+
+personas = []
+
+for index, item in enumerate(data):
+    data[index] = item.strip()
+
+# data = [item.strip() for item in data]
+
+for index, item in enumerate(data):
+    data[index] = item.split(",")
+
+for item in data:
+    dict_persona = {}
+    indice = 0
+    for key in header:
+        if item[indice].isdigit():
+            item[] = int(item[indice])
+        # dict_persona[key] = item[header.index(key)]
+        dict_persona[key] = item[indice]
+        indice += 1
+    personas.append(dict_persona)
+
+for persona in personas:
+    print(persona)
+
+with open(os.path.join(dir_acual, "personas2.csv"), "w") as file:
+
+    header = ",".join(list(personas[0].keys())) + "\n"
+    file.write(header)
+    for persona in personas:
+        values = []
+        for value in persona.values():
+            if isinstance(value,int):
+                value = str(value)
+            values.append(value)
+        line = ",".join(values) + "\n"
+        file.write(line)
