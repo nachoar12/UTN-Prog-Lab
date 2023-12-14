@@ -6,13 +6,16 @@ from functions import draw_text
 class Player():
     def __init__(self, x, y, world: World, screen):
         self.reset(x, y, screen)
-        self.world = world
         self.screen = screen
+        self.world = world
+        self.melee = False
+        self.melee_activated = False
+        
 
     def update(self, game_over):
         delta_x = 0
         delta_y = 0
-        walk_cooldown = 5
+        walk_cooldown = 3
         col_threshold = 20
         if game_over == 0:
             # get keypresses
@@ -28,7 +31,7 @@ class Player():
                 delta_x -= 5
                 self.counter += 1
                 self.direction = -1
-            if key[pygame.K_RIGHT] or key[pygame.K_d]:
+            elif key[pygame.K_RIGHT] or key[pygame.K_d]:
                 delta_x += 5
                 self.counter += 1
                 self.direction = 1
@@ -39,6 +42,14 @@ class Player():
                     self.image = self.images_right[self.index]
                 elif self.direction == -1:
                     self.image = self.images_left[self.index]
+            if key[pygame.K_SPACE] == 1 and not self.melee_activated and not self.melee:
+                self.melee = True
+                self.melee_activated = True
+            elif key[pygame.K_SPACE] == 0 :  
+                #cargar animacion de ataque melee
+                self.melee = False
+                self.melee_activated = False
+
 
             # handle animation
             if self.counter > walk_cooldown:
@@ -74,17 +85,33 @@ class Player():
                         self.vel_y = 0
                         self.in_air = False
 
+            # Check for collision with tiles in x direction
+            for tile in tile_group:
+                # collision in x direction
+                if tile.rect.colliderect(self.rect.x + delta_x, self.rect.y, self.width, self.height):
+                    delta_x = 0
+                # collision in y direction
+                if tile.rect.colliderect(self.rect.x, self.rect.y + delta_y, self.width, self.height):
+                    # check if below platform
+                    if abs((self.rect.top + delta_y) - tile.rect.bottom) < col_threshold:
+                        self.vel_y  = 0
+                        delta_y = tile.rect.bottom - self.rect.top
+                    # check if above platform
+                    elif abs((self.rect.bottom + delta_y) - tile.rect.top) < col_threshold:
+                        self.rect.bottom = tile.rect.top - 1 
+                        self.in_air = False
+                        delta_y = 0
+
 
             # check for collision with enemies
             if pygame.sprite.spritecollide(self, pirate_enemy_group, False):
-                self.lives -= 1
-                if self.lives == 0:
+                if self.melee:
+                    pirate_enemy_group.remove()
+                else:
                     game_over = -1
                     game_over_fx.play()
             # check for collision with spikes
             if pygame.sprite.spritecollide(self, traps_group, False):
-                self.lives -= 1
-                if self.lives == 0:
                     game_over = -1
                     game_over_fx.play()
             # check for collision with door
@@ -116,7 +143,7 @@ class Player():
             self.rect.x += delta_x
             self.rect.y += delta_y
         elif game_over == -1:
-            draw_text('GAME OVER', font_score, WHITE, SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT // 2, self.screen)
+            draw_text('GAME OVER', game_over_font, WHITE, SCREEN_WIDTH // 2 - 200, SCREEN_HEIGHT // 2, self.screen)
             if self.direction == 1:
                 self.image = self.dead_image
             elif self.direction == -1:
@@ -124,10 +151,15 @@ class Player():
                     self.dead_image, True, False)
             if self.rect.y > 200:
                 self.rect.y -= 5
+        elif game_over == 1:
+             draw_text('LEVEL COMPLETED', game_over_font, WHITE, SCREEN_WIDTH // 2 - 300, SCREEN_HEIGHT // 2, self.screen)
 
         # draw player
         self.screen.blit(self.image, self.rect)
+        #debug
         # pygame.draw.rect(self.screen, ('white'), self.rect, 2)
+        print(self.melee)
+        print(pygame.K_SPACE)
 
         return game_over
 
@@ -138,7 +170,7 @@ class Player():
         self.counter = 0
         for num in range(0, 4):
             img_right = pygame.image.load(f'./assets/img/pirate/{num}.png')
-            img_right = pygame.transform.scale(img_right, (40, 60))
+            img_right = pygame.transform.scale(img_right, (TILE_SIZE // 2, TILE_SIZE))
             img_left = pygame.transform.flip(img_right, True, False)
             self.images_right.append(img_right)
             self.images_left.append(img_left)
@@ -151,9 +183,9 @@ class Player():
         self.rect.y = y
         self.width = self.image.get_width()
         self.height = self.image.get_height()
-        self.lives = 3
         self.vel_y = 0
         self.jump = False
         self.direction = 0
         self.in_air = False
+        
 

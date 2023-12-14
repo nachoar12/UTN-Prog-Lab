@@ -20,7 +20,8 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.left_img
         elif self.move_direction > 0 :
             self.image = self.right_img
-        # pygame.draw.rect(self.screen, ('yellow'), self.rect, 2)
+        # debug
+        # pygame.draw.rect(self.screen, ('red'), self.rect, 2)
         self.rect.x += self.move_direction
         self.move_counter += 1
         if abs(self.move_counter) > 50:

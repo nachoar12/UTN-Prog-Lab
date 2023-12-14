@@ -12,6 +12,9 @@ class Button():
         self.screen = screen
 
     def draw(self):
+        self.screen.blit(self.image, self.rect)
+
+    def is_pressed(self):
         action = False
         # get mouse position
         mouse_pos = pygame.mouse.get_pos()
@@ -25,7 +28,6 @@ class Button():
             self.clicked = False
 
         # draw button
-        self.screen.blit(self.image, self.rect)
 
         return action
 

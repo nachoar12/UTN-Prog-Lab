@@ -201,11 +201,13 @@ while run:
         pickle_out = open(f'level{level}_data', 'wb')
         pickle.dump(world_data, pickle_out)
         pickle_out.close()
+        print('saved level data')
     if load_button.draw():
         # load in level data
         if path.exists(f'level{level}_data'):
             pickle_in = open(f'level{level}_data', 'rb')
             world_data = pickle.load(pickle_in)
+            print('loaded level')
 
     # show the grid and draw the level tiles
     draw_grid()
