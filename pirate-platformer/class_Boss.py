@@ -22,7 +22,7 @@ class Boss(pygame.sprite.Sprite):
         self.projectile_path = './assets/img/projectile/round_shot.png'
         self.projectile_cooldown = 120
         self.projectile_timer = 0
-        self.lives = 10
+        self.lives = 5
         global sfx_on
 
     def load_animations(self, action: str, number_of_frames, direction: str = 'right'):

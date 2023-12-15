@@ -11,6 +11,7 @@ from class_Player import Player
 from class_PowerUp import PowerUp
 from start_menu import start_menu
 from options_menu import options_menu
+# from input_menu import text_input
 import sqlite3
 
 # Conexión a la base de datos (si no existe, se creará)
@@ -27,7 +28,7 @@ cursor.execute('''
     )
 ''')
 
-name = input("Ingrese su nombre: ")
+
 
 
 pygame.init()
@@ -94,6 +95,9 @@ level_2_button = Button(SCREEN_WIDTH // 2 - 100,
 level_3_button = Button(SCREEN_WIDTH // 2 + 200,
                         SCREEN_HEIGHT // 2, level_3_btn, screen)
 
+# name = text_input()
+name = input('Ingerese su nombre: ')
+
 pygame.mixer.music.play(-1, 0.0, 5000)
 level_selected = start_menu()
 # level_selected = 5
@@ -131,7 +135,7 @@ while run:
 
         # check collision with enemy projectiles
         for enemy in pirate_enemy_group:
-            print(enemy.projectile_group)
+            # print(enemy.projectile_group)
             for enemy_projectile in enemy.projectile_group:
                 if pygame.sprite.collide_rect(player, enemy_projectile):
                     enemy_projectile.kill()
@@ -206,7 +210,7 @@ while run:
         game_over = -1
     # if player has died or time is 0
     if game_over == -1:
-        if not game_over_save: 
+        if not game_over_save:
             save_player_data(name, score, level_selected) 
         time = 0
    
@@ -263,7 +267,7 @@ while run:
                         is_paused = False 
                         pygame.time.delay(100)
                     # print(r,l)
-    print(game_over_save, win_save)
+    # print(game_over_save, win_save)
     pygame.display.update()
 conn.close()
 pygame.quit()
