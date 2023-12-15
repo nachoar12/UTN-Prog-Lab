@@ -1,7 +1,6 @@
 import pygame
 import os
-from pygame.image import load as load_image
-
+from functions import load_images_from_json, load_sounds_from_json
 # FPS
 FPS = 60
 # game over
@@ -24,18 +23,19 @@ SCREEN_HEIGHT = TILE_SIZE * COLS
 # colors
 WHITE = (255, 255, 255)
 SKYBLUE = 133, 183, 199
-
-# Actual directory
+# sounds
+music_on = True
+sfx_on = True
+# pause
+is_paused = False
 abs_dir = os.path.abspath(os.getcwd())
+imgs_dir = os.path.join(abs_dir, 'image_paths.json')
+sounds_dir = os.path.join(abs_dir, 'sound_paths.json')
+font_dir = os.path.join(abs_dir, 'assets', 'fonts')
 
-# Base directory
-img_dir = os.path.join(abs_dir, "assets", "img")
-buttons_dir = os.path.join(abs_dir, "assets", "img", "buttons")
-font_dir = os.path.join(abs_dir, "assets", "fonts")
-keys_dir = os.path.join(abs_dir, "assets", "img", "keys")
-
-
-pygame.mixer.init()
+# import images
+img_data = load_images_from_json(imgs_dir)
+sound_data = load_sounds_from_json(sounds_dir)
 
 # font
 pygame.font.init()
@@ -56,63 +56,56 @@ except Exception as error:
     pygame.quit()
 
 # load images
-try:
-    bkg_image = load_image(os.path.join(img_dir, 'background', 'background.png'))
-    restart_btn = load_image(os.path.join(buttons_dir, 'restart_btn.png'))
-    next_btn = load_image(os.path.join(buttons_dir, 'next_btn.png'))
-    home_btn = load_image(os.path.join(buttons_dir, 'home_btn.png'))
-    start_btn = load_image(os.path.join(buttons_dir, 'start_btn.png'))
-    options_btn = load_image(os.path.join(buttons_dir, 'options_btn.png'))
-    exit_btn = load_image(os.path.join(buttons_dir, 'exit_btn.png'))
-    information_btn = load_image(os.path.join(buttons_dir, 'information_btn.png'))
-    sound_btn = load_image(os.path.join(buttons_dir, 'sound_btn.png'))
-    back_btn = load_image(os.path.join(buttons_dir, 'back_btn.png'))
-    level_1_btn = load_image(os.path.join(buttons_dir, 'level_1_btn.png'))
-    level_2_btn = load_image(os.path.join(buttons_dir, 'level_2_btn.png'))
-    level_3_btn = load_image(os.path.join(buttons_dir, 'level_3_btn.png'))
-    UP_arrow = load_image(os.path.join(keys_dir, 'up_arrow.png'))
-    DOWN_arrow = load_image(os.path.join(keys_dir, 'down_arrow.png'))
-    LEFT_arrow = load_image(os.path.join(keys_dir, 'left_arrow.png'))
-    RIGHT_arrow = load_image(os.path.join(keys_dir, 'right_arrow.png'))
-    SPACE_key = load_image(os.path.join(keys_dir,'SPACE_key.png'))
-    W_key = load_image(os.path.join(keys_dir, 'key_W.png'))
-    A_key = load_image(os.path.join(keys_dir, 'key_A.png'))
-    S_key = load_image(os.path.join(keys_dir, 'key_S.png'))
-    D_key = load_image(os.path.join(keys_dir, 'key_D.png'))
-    F_key = load_image(os.path.join(keys_dir, 'key_F.png'))
-    P_key = load_image(os.path.join(keys_dir, 'key_P.png'))
-except FileNotFoundError as file_error:
-    print("Archivo no encontrado: ", file_error)
-    pygame.quit()
-except pygame.error as pygame_error:
-    print("Error de pygame: ", pygame_error)
-    pygame.quit()
-except Exception as error:
-    print("Error : ", error)
-    pygame.quit()
 
-sounds_dir = os.path.join(abs_dir, "assets", "sounds")
+bkg_image = img_data['background_image']
+restart_btn = img_data['restart_button']
+next_btn = img_data['next_button']
+home_btn = img_data['home_button']
+start_btn = img_data['start_button']
+options_btn = img_data['options_button']
+exit_btn = img_data['exit_button']
+information_btn = img_data['information_button']
+sound_btn = img_data['sound_button']
+music_btn = img_data['music_button']
+back_btn = img_data['back_button']
+level_1_btn = img_data['level_1_button']
+level_2_btn = img_data['level_2_button']
+level_3_btn = img_data['level_3_button']
+UP_arrow = img_data['up_arrow']
+DOWN_arrow = img_data['down_arrow']
+LEFT_arrow = img_data['left_arrow']
+RIGHT_arrow = img_data['right_arrow']
+SPACE_key = img_data['space_key']
+W_key = img_data['key_W']
+A_key = img_data['key_A']
+S_key = img_data['key_S']
+D_key = img_data['key_D']
+F_key = img_data['key_F']
+P_key = img_data['key_P']
 
-try:
-    pygame.mixer.music.load(os.path.join(sounds_dir, "bgm.mp3"))
-    pygame.mixer.music.set_volume(0.5)
-    coin_fx = pygame.mixer.Sound(os.path.join(sounds_dir, "coin.wav"))
-    coin_fx.set_volume(0.5)
-    jump_fx = pygame.mixer.Sound(os.path.join(sounds_dir, "jump.mp3"))
-    jump_fx.set_volume(0.5)
-    game_over_fx = pygame.mixer.Sound(os.path.join(sounds_dir, "game_over.mp3"))
-    game_over_fx.set_volume(0.5)
-    hurt_fx = pygame.mixer.Sound(os.path.join(sounds_dir, "hurt.mp3"))
-    hurt_fx.set_volume(0.5)
-except FileNotFoundError as file_error:
-    print("Archivo no encontrado: ", file_error)
-    pygame.quit()
-except pygame.error as pygame_error:
-    print("Error de pygame: ", pygame_error)
-    pygame.quit()
-except Exception as error:
-    print("Error : ", error)
-    pygame.quit()
+# load sounds
+
+pygame.mixer.init()
+
+bgm_music = pygame.mixer.music.load("assets/sounds/bgm.mp3")
+pygame.mixer.music.set_volume(0.5)
+coin_fx = sound_data['coin_sound']
+coin_fx.set_volume(0.5)
+jump_fx = sound_data['jump_sound']
+jump_fx.set_volume(0.5)
+game_over_fx = sound_data['game_over_sound']
+game_over_fx.set_volume(0.5)
+hurt_fx = sound_data['hurt_sound']
+hurt_fx.set_volume(0.5)
+ranged_fx = sound_data['ranged_sound']
+ranged_fx.set_volume(0.5)
+hit_fx = sound_data['hit_sound']
+hit_fx.set_volume(0.5)
+projectile_fx = sound_data['projectile_sound']
+projectile_fx.set_volume(0.3)
+power_fx = sound_data['power_sound']
+power_fx.set_volume(0.5)
+
 
 # sprite groups
 tile_group = pygame.sprite.Group()
@@ -121,5 +114,7 @@ platforms_group = pygame.sprite.Group()
 traps_group = pygame.sprite.Group()
 coin_group = pygame.sprite.Group()
 door_group = pygame.sprite.Group()
+life_group = pygame.sprite.Group()
+power_up_group = pygame.sprite.Group()
 
 

@@ -22,15 +22,15 @@ def level_selector():
         level_3_button.draw()
         if level_1_button.is_pressed():
             level = 1
-            print("level 1")
+            # print("level 1")
             return level
         if level_2_button.is_pressed():
             level = 2
-            print("level 2")
+            # print("level 2")
             return level
         if level_3_button.is_pressed():
             level = 3
-            print("level 3")
+            # print("level 3")
             return level
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:

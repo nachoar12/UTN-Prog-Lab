@@ -1,75 +1,67 @@
 import pygame
-import sys
+from settings import *
+from class_Button import Button
+from instructions_menu import display_instructions
+from functions import draw_text
 
-# Inicializar Pygame
-pygame.init()
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Colores
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
+information_button = Button(SCREEN_WIDTH // 2 - TILE_SIZE * 6,
+                            SCREEN_HEIGHT // 2 - TILE_SIZE * 3, information_btn, screen)
+sound_button = Button(SCREEN_WIDTH // 2 + TILE_SIZE * 3,
+                      SCREEN_HEIGHT // 2 - TILE_SIZE * 3, sound_btn, screen)
+back_button = Button(SCREEN_WIDTH // 2 - TILE_SIZE * 1.5,
+                     SCREEN_HEIGHT // 2 + TILE_SIZE * 3, back_btn, screen)
 
-# Tamaño de la ventana
-WIDTH, HEIGHT = 400, 300
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Selector de Niveles")
+def options_menu():
+    clock = pygame.time.Clock()
+    running = True
+    global sound_on, sfx_on
 
-# Fuente y tamaño del texto
-font = pygame.font.Font(None, 36)
+    while running:
+        screen.blit(bkg_image, (0, 0))
+        clock.tick(FPS)
+        information_button.draw()
+        sound_button.draw()
+        sfx_button.draw()
+        back_button.draw()
 
-# Función para dibujar botones
+        # Display whether sound and SFX are on or off
+        if sound_on:
+            draw_text("Sound: ON", info_font_2, WHITE, SCREEN_WIDTH // 2 + TILE_SIZE * 4, SCREEN_HEIGHT // 2 - TILE_SIZE * 3, screen)
+        else:
+            draw_text("Sound: OFF", info_font_2, WHITE, SCREEN_WIDTH // 2 + TILE_SIZE * 4, SCREEN_HEIGHT // 2 - TILE_SIZE * 3, screen)
 
+        if sfx_on:
+            draw_text("SFX: ON", info_font_2, WHITE, SCREEN_WIDTH // 2 + TILE_SIZE * 4, SCREEN_HEIGHT // 2, screen)
+        else:
+            draw_text("SFX: OFF", info_font_2, WHITE, SCREEN_WIDTH // 2 + TILE_SIZE * 4, SCREEN_HEIGHT // 2, screen)
 
-def draw_buttons():
-    level1_text = font.render("Nivel 1", True, WHITE)
-    level2_text = font.render("Nivel 2", True, WHITE)
-    level3_text = font.render("Nivel 3", True, WHITE)
+        pygame.display.update()
 
-    # Botones rectangulares
-    level1_button = pygame.Rect(50, 50, 200, 50)
-    level2_button = pygame.Rect(50, 120, 200, 50)
-    level3_button = pygame.Rect(50, 190, 200, 50)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return False  # Return False to resume the game
 
-    # Dibujar botones
-    pygame.draw.rect(screen, RED, level1_button)
-    pygame.draw.rect(screen, GREEN, level2_button)
-    pygame.draw.rect(screen, BLUE, level3_button)
+        # Check for button presses
+        if back_button.is_pressed():
+            return True  # Return True to resume the game
+        elif sound_button.is_pressed():
+            sound_on = not sound_on
+            # Handle sound toggling (mute/unmute sound)
+            if sound_on:
+                pygame.mixer.music.unpause()
+            else:
+                pygame.mixer.music.pause()
+        elif sfx_button.is_pressed():
+            sfx_on = not sfx_on
+            # Handle SFX toggling (mute/unmute SFX)
+            # Code to mute/unmute your sound effects (projectiles, jump, collision, etc.)
 
-    # Dibujar texto en botones
-    screen.blit(level1_text, (65, 60))
-    screen.blit(level2_text, (65, 130))
-    screen.blit(level3_text, (65, 200))
+    return False  # Return False if the 'Back' button was not pressed (to exit the game or continue game logic)
 
-    return level1_button, level2_button, level3_button
-
-
-running = True
-level_selected = None
-
-while running:
-    screen.fill((0, 0, 0))
-
-    # Dibujar botones y obtener su posición
-    level1_button, level2_button, level3_button = draw_buttons()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-            pygame.quit()
-            sys.exit()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_pos = pygame.mouse.get_pos()
-
-            # Verificar si se hizo clic en algún botón
-            if level1_button.collidepoint(mouse_pos):
-                level_selected = 1
-            elif level2_button.collidepoint(mouse_pos):
-                level_selected = 2
-            elif level3_button.collidepoint(mouse_pos):
-                level_selected = 3
-
-    pygame.display.flip()
-    print(level_selected)
-
-# Luego, puedes usar la variable `level_selected` para llevar a cabo la acción correspondiente con el nivel seleccionado.
+options_menu()

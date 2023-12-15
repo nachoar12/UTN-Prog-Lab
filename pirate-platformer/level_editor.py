@@ -37,6 +37,9 @@ platform = pygame.image.load('./assets/img/tiles/platform.png')
 door = pygame.image.load('./assets/img/door/door.png')
 save_img = pygame.image.load('./assets/img/buttons/save.png')
 load_img = pygame.image.load('./assets/img/buttons/load.png')
+boss_img = pygame.image.load('./assets/img/enemy/spell_0.png')
+life_img = pygame.image.load('./assets/img/life/life.png')
+clock_img = pygame.image.load('./assets/img/power/clock.png')
 
 
 # define game variables
@@ -141,13 +144,32 @@ def draw_world():
                     # door
                     img = pygame.transform.scale(
                         door, (tile_size * 2.5, int(tile_size * 2)))
-                    screen.blit(img, (col * tile_size - 37, row * tile_size - 50))
+                    screen.blit(
+                        img, (col * tile_size - 37, row * tile_size - 50))
                 if world_data[row][col] == 12:
                     # platform
                     img = pygame.transform.scale(
                         platform, (tile_size, tile_size))
                     screen.blit(img, (col * tile_size, row *
                                 tile_size))
+                if world_data[row][col] == 13:
+                    # boss
+                    img = pygame.transform.scale(
+                        boss_img, (tile_size * 1.3, tile_size))
+                    screen.blit(img, (col * tile_size, row *
+                                tile_size))
+                if world_data[row][col] == 14:
+                    # boss
+                    img = pygame.transform.scale(
+                        life_img, (tile_size // 2, tile_size // 2))
+                    screen.blit(img, (col * tile_size + 12, row *
+                                tile_size + 12))
+                if world_data[row][col] == 15:
+                    # boss
+                    img = pygame.transform.scale(
+                        clock_img, (tile_size // 2, tile_size // 2))
+                    screen.blit(img, (col * tile_size + 12, row *
+                                tile_size + 12))
 
 
 class Button():
@@ -181,8 +203,10 @@ class Button():
 
 
 # create load and save buttons
-save_button = Button(screen_width // 2 - 150, screen_height - 80, save_img, screen)
-load_button = Button(screen_width // 2 + 50, screen_height - 80, load_img, screen)
+save_button = Button(screen_width // 2 - 150,
+                     screen_height - 80, save_img, screen)
+load_button = Button(screen_width // 2 + 50,
+                     screen_height - 80, load_img, screen)
 
 # main game loop
 run = True
@@ -234,12 +258,12 @@ while run:
                 # update tile value
                 if pygame.mouse.get_pressed()[0] == 1:
                     world_data[y][x] += 1
-                    if world_data[y][x] > 12:
+                    if world_data[y][x] > 15:
                         world_data[y][x] = 0
                 elif pygame.mouse.get_pressed()[2] == 1:
                     world_data[y][x] -= 1
                     if world_data[y][x] < 0:
-                        world_data[y][x] = 12
+                        world_data[y][x] = 15
         if event.type == pygame.MOUSEBUTTONUP:
             clicked = False
         # up and down key presses to change level number
